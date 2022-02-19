@@ -25,15 +25,7 @@ private static final String USERNAME = "root";
 private static final String PASSWORD = "";
 private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/agenciaviagens";
 ```
-3. Copie a pasta jar_files para o C:\ ou, no Eclipse, ajuste o caminho dos arquivos jar para o conector com o MySQL e para o pacote Gson.
-4. No Eclipse, configure o projeto para rodar no Tomcat: botão direito na pasta do seu projeto -> 'Properties' -> 'Project Facet' -> em 'Project Facets' (a esquerda) marque 'Java', 'JavaScript' e 'Dynamic Web Module', em 'Runtimes' (a direita) marque o Tomcat -> 'Apply and Close'.
-
-![Configuração Project Facets](./media/config_project_facets.png)
-
-5. Execute o projeto com o Tomcat. A aplicação irá ouvir a porta 8080.
-6. Tente acessar o link 'http://localhost:8080/AgenciaViagens/destinations', caso seja gerado erro 500, será necessário adicionar o conector com o MySQL na inicialização do Tomcat: (no Eclipse) 'Servers' -> duplo clique no servidor Tomcat -> 'Open launch configuration' -> 'Classpath' -> selecione 'User Entries' -> 'Add External JARs...' -> adicione o caminho do conector com o MySQL -> 'Apply' -> 'Ok' -> reinicie o Tomcat e teste novamente o link. Tudo estando certo, será retornado um json de destinos.
-
-![Configuração Tomcat Server](./media/config_tomcat_server.png)
+3. Execute o projeto com o Tomcat. A aplicação irá ouvir a porta 8080.
 
 ###### 3. Frontend
 1. Execute o comando abaixo na pasta frontend para instalar as dependencias do React:
