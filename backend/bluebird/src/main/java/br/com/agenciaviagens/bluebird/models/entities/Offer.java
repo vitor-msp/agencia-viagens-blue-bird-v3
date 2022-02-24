@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -18,6 +20,8 @@ public class Offer {
 	private Destination destination;
 	
 	@NotBlank
+	@Min(0)
+	@Max(1)
 	private float discount;
 	
 	@NotBlank

@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -26,6 +27,7 @@ public class Trip {
 	private String arrival;
 	
 	@NotBlank
+	@Min(0)
 	private Double defaultValue;
 	
 	public Trip() {}
