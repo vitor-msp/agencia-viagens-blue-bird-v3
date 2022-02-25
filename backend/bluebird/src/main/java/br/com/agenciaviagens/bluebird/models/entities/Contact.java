@@ -4,7 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Contact {
@@ -14,23 +16,28 @@ public class Contact {
 	private Integer id;
 	
 	@NotBlank
+	@Email
+	@Size(max = 30)
 	private String email;
 	
 	@NotBlank
+	@Size(max = 100)
 	private String subject;
 	
 	@NotBlank
+	@Size(max = 1000)
 	private String body;
 	
 	public Contact() {}
 	
-	public Contact(@NotBlank String email, @NotBlank String subject, @NotBlank String body) {
+	public Contact(@NotBlank @Email @Size(max = 30) String email, @NotBlank @Size(max = 100) String subject,
+			@NotBlank @Size(max = 1000) String body) {
 		super();
-		setEmail(email);
-		setSubject(subject);
-		setBody(body);
+		this.email = email;
+		this.subject = subject;
+		this.body = body;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}

@@ -1,18 +1,28 @@
-//package br.com.agenciaviagens.bluebird.controllers;
-//
-//import javax.validation.Valid;
-//
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
-////@RestController
-////@RequestMapping("/contacts")
-////public class ContactsController {
-////
-////	@PostMapping
-////	public ResponseEntity<?> postContact(@Valid){
-////		
-////	}
-////}
+package br.com.agenciaviagens.bluebird.controllers;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.agenciaviagens.bluebird.models.entities.Contact;
+import br.com.agenciaviagens.bluebird.models.repositories.ContactRepository;
+import br.com.agenciaviagens.bluebird.payload.response.MessageResponse;
+
+@RestController
+@RequestMapping("/contacts")
+public class ContactsController{
+
+	@Autowired
+	ContactRepository contactRepository;
+	
+	@PostMapping
+	public ResponseEntity<?> postContact(@Valid @RequestBody Contact contact){
+		contactRepository.save(contact);
+		return ResponseEntity.ok(new MessageResponse("Contato efetuado com sucesso!"));
+	}
+}
