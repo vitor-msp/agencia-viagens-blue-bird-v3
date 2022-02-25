@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.agenciaviagens.bluebird.models.entities.User;
-import br.com.agenciaviagens.bluebird.models.repositories.UserRepository;
+import br.com.agenciaviagens.bluebird.models.entities.Client;
+//import br.com.agenciaviagens.bluebird.models.entities.User;
+import br.com.agenciaviagens.bluebird.models.repositories.ClientRepository;
+//import br.com.agenciaviagens.bluebird.models.repositories.UserRepository;
 import br.com.agenciaviagens.bluebird.payload.request.LoginRequest;
 import br.com.agenciaviagens.bluebird.payload.request.SignupRequest;
 import br.com.agenciaviagens.bluebird.payload.response.JwtResponse;
@@ -35,14 +37,14 @@ public class AuthController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	@Autowired
-	UserRepository userRepository;
+	ClientRepository clientRepository;
 //	@Autowired
 //	RoleRepository roleRepository;
 	@Autowired
 	PasswordEncoder encoder;
 	@Autowired
 	JwtUtils jwtUtils;
-	@PostMapping("/signin")
+	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -59,21 +61,24 @@ public class AuthController {
 												 userDetails.getEmail(), 
 												 roles));
 	}
-	@PostMapping("/signup")
+	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
-		}
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+//		if (clientRepository.existsByUsername(signUpRequest.getUsername())) {
+//			return ResponseEntity
+//					.badRequest()
+//					.body(new MessageResponse("Error: Username is already taken!"));
+//		}
+		if (clientRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
-		User user = new User(signUpRequest.getUsername(), 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+		Client client = new Client(signUpRequest.getName(),
+				signUpRequest.getRg(),
+				signUpRequest.getCpf(),
+				signUpRequest.getBirthDate(),
+				signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()));
 //		Set<String> strRoles = signUpRequest.getRole();
 //		Set<Role> roles = new HashSet<>();
 //		roles.add(null)
@@ -102,7 +107,7 @@ public class AuthController {
 //			});
 //		}
 //		user.setRoles(roles);
-		userRepository.save(user);
+		clientRepository.save(client);
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }

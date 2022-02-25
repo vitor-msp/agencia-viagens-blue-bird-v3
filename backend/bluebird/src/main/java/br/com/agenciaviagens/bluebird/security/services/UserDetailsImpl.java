@@ -12,19 +12,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.agenciaviagens.bluebird.models.entities.User;
+import br.com.agenciaviagens.bluebird.models.entities.Client;
+//import br.com.agenciaviagens.bluebird.models.entities.User;
 import br.com.agenciaviagens.bluebird.security.roles.ERole;
 import br.com.agenciaviagens.bluebird.security.roles.Role;
 
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
-	private Long id;
+	private int id;
 	private String username;
 	private String email;
 	@JsonIgnore
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
-	public UserDetailsImpl(Long id, String username, String email, String password,
+	public UserDetailsImpl(int id, String username, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
@@ -32,7 +33,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.password = password;
 		this.authorities = authorities;
 	}
-	public static UserDetailsImpl build(User user) {
+	public static UserDetailsImpl build(Client client) {
 //		List<GrantedAuthority> authorities = new ArrayList<>();
 //		authorities.add(new SimpleGrantedAuthority("USER"));
 		Set<Role> roles = new HashSet<>();
@@ -43,17 +44,17 @@ public class UserDetailsImpl implements UserDetails {
 				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
 				.collect(Collectors.toList());
 		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
-				user.getEmail(),
-				user.getPassword(), 
+				client.getId(),
+				client.getEmail(),
+				client.getEmail(),
+				client.getPassword(), 
 				authorities);
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 	public String getEmail() {
@@ -65,7 +66,7 @@ public class UserDetailsImpl implements UserDetails {
 	}
 	@Override
 	public String getUsername() {
-		return username;
+		return email;
 	}
 	@Override
 	public boolean isAccountNonExpired() {
