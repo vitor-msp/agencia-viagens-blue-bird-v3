@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Destination {
@@ -18,26 +21,31 @@ public class Destination {
 	private Integer id;
 	
 	@NotBlank
+	@Size(max = 30)
 	private String city;
 	
 	@NotBlank
+	@Size(max = 2)
 	private String uf;
 	
 	@NotBlank
+	@Size(max = 30)
 	private String landingPlace;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "destination")
 	private List<Trip> trips;
 	
 	public Destination() {}
 	
-	public Destination(@NotBlank String city, @NotBlank String uf, @NotBlank String landingPlace) {
+	public Destination(@NotBlank @Size(max = 30) String city, @NotBlank @Size(max = 2) String uf,
+			@NotBlank @Size(max = 30) String landingPlace) {
 		super();
-		setCity(city);
-		setUf(uf);
-		setLandingPlace(landingPlace);
+		this.city = city;
+		this.uf = uf;
+		this.landingPlace = landingPlace;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
