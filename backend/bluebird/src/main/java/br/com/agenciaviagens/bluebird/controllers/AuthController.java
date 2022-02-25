@@ -1,12 +1,7 @@
 package br.com.agenciaviagens.bluebird.controllers;
 
-//import java.util.HashSet;
-import java.util.List;
-//import java.util.Set;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.support.BeanDefinitionDsl.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.agenciaviagens.bluebird.models.entities.Client;
-//import br.com.agenciaviagens.bluebird.models.entities.User;
 import br.com.agenciaviagens.bluebird.models.repositories.ClientRepository;
-//import br.com.agenciaviagens.bluebird.models.repositories.UserRepository;
 import br.com.agenciaviagens.bluebird.payload.request.LoginRequest;
-import br.com.agenciaviagens.bluebird.payload.request.SignupRequest;
+import br.com.agenciaviagens.bluebird.payload.request.RegisterRequest;
 import br.com.agenciaviagens.bluebird.payload.response.JwtResponse;
 import br.com.agenciaviagens.bluebird.payload.response.MessageResponse;
 import br.com.agenciaviagens.bluebird.security.jwt.JwtUtils;
@@ -32,82 +25,51 @@ import br.com.agenciaviagens.bluebird.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
+	
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
 	@Autowired
 	ClientRepository clientRepository;
-//	@Autowired
-//	RoleRepository roleRepository;
+
 	@Autowired
 	PasswordEncoder encoder;
+	
 	@Autowired
 	JwtUtils jwtUtils;
+	
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<?> authenticateClient(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
 		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles));
+												 userDetails.getId(),
+												 userDetails.getUsername()));
+				
 	}
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-//		if (clientRepository.existsByUsername(signUpRequest.getUsername())) {
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new MessageResponse("Error: Username is already taken!"));
-//		}
-		if (clientRepository.existsByEmail(signUpRequest.getEmail())) {
+	public ResponseEntity<?> registerClient(@Valid @RequestBody RegisterRequest registerRequest) {
+
+		if (clientRepository.existsByEmail(registerRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
+					.body(new MessageResponse("Erro: Email já cadastrado!"));
 		}
-		Client client = new Client(signUpRequest.getName(),
-				signUpRequest.getRg(),
-				signUpRequest.getCpf(),
-				signUpRequest.getBirthDate(),
-				signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()));
-//		Set<String> strRoles = signUpRequest.getRole();
-//		Set<Role> roles = new HashSet<>();
-//		roles.add(null)
-//		if (strRoles == null) {
-//			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//			roles.add(userRole);
-//		} else {
-//			strRoles.forEach(role -> {
-//				switch (role) {
-//				case "admin":
-//					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(adminRole);
-//					break;
-//				case "mod":
-//					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(modRole);
-//					break;
-//				default:
-//					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(userRole);
-//				}
-//			});
-//		}
-//		user.setRoles(roles);
+		Client client = new Client(
+				registerRequest.getName(),
+				registerRequest.getRg(),
+				registerRequest.getCpf(),
+				registerRequest.getBirthDate(),
+				registerRequest.getEmail(),
+				encoder.encode(registerRequest.getPassword()));
+
 		clientRepository.save(client);
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.ok(new MessageResponse("Usuário cadastrado com sucesso!"));
 	}
 }

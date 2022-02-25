@@ -9,7 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Client {
@@ -19,39 +23,47 @@ public class Client {
 	private Integer id;
 	
 	@NotBlank
+	@Size(max = 50)
 	private String name;
 	
 	@NotBlank
+	@Size(max = 10)
 	private String rg;
 	
 	@NotBlank
+	@Size(min = 11, max = 11)
 	private String cpf;
 	
 	@NotBlank
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String birthDate;
 	
 	@NotBlank
+	@Email
+	@Size(max = 30)
 	private String email;
 	
 	@NotBlank
+	@Size(max = 100)
 	private String password;
 	
-	@OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
 	private List<Purchase> purchases;
 
 	public Client() {}
 	
-	public Client(@NotBlank String name, @NotBlank String rg, @NotBlank String cpf, @NotBlank String birthDate,
-			@NotBlank String email, @NotBlank String password) {
+	public Client(@NotBlank @Size(max = 50) String name, @NotBlank @Size(max = 10) String rg,
+			@NotBlank @Size(min = 11, max = 11) String cpf, @NotBlank String birthDate,
+			@NotBlank @Email @Size(max = 30) String email, @NotBlank @Size(max = 100) String password) {
 		super();
-		setName(name);
-		setRg(rg);
-		setCpf(cpf);
-		setBirthDate(birthDate);
-		setEmail(email);
-		setPassword(password);
+		this.name = name;
+		this.rg = rg;
+		this.cpf = cpf;
+		this.birthDate = birthDate;
+		this.email = email;
+		this.password = password;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}

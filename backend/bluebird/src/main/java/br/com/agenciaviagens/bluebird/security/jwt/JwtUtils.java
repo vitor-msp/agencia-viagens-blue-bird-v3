@@ -12,11 +12,15 @@ import io.jsonwebtoken.*;
 
 @Component
 public class JwtUtils {
+	
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+	
 	@Value("${bluebird.app.jwtSecret}")
 	private String jwtSecret;
+	
 	@Value("${bluebird.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
+	
 	public String generateJwtToken(Authentication authentication) {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		return Jwts.builder()
@@ -26,23 +30,25 @@ public class JwtUtils {
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
 	}
+	
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
+	
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
 			return true;
 		} catch (SignatureException e) {
-			logger.error("Invalid JWT signature: {}", e.getMessage());
+			logger.error("Assinatura JWT inválida: {}", e.getMessage());
 		} catch (MalformedJwtException e) {
-			logger.error("Invalid JWT token: {}", e.getMessage());
+			logger.error("Token JWT inválido: {}", e.getMessage());
 		} catch (ExpiredJwtException e) {
-			logger.error("JWT token is expired: {}", e.getMessage());
+			logger.error("Token JWT expirado: {}", e.getMessage());
 		} catch (UnsupportedJwtException e) {
-			logger.error("JWT token is unsupported: {}", e.getMessage());
+			logger.error("Sem suporte para Token JWT: {}", e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.error("JWT claims string is empty: {}", e.getMessage());
+			logger.error("String de declarações JWT vazia: {}", e.getMessage());
 		}
 		return false;
 	}

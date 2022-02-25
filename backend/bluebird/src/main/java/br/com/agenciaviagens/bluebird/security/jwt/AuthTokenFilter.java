@@ -15,37 +15,41 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.agenciaviagens.bluebird.security.services.UserDetailsImpl;
 import br.com.agenciaviagens.bluebird.security.services.UserDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
+	
 	@Autowired
 	private JwtUtils jwtUtils;
+	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
+	
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
 			String jwt = parseJwt(request);
-//			System.out.println(jwt);
+
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+				
 				String email = jwtUtils.getUserNameFromJwtToken(jwt);
-//				System.out.println(username);
-				UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(email);
-//				System.out.println(userDetails.getUsername());
-//				System.out.println(userDetails.getAuthorities());
+				UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
+			
 		} catch (Exception e) {
-			logger.error("Cannot set user authentication: {}", e);
+			logger.error("Não é possível definir a autenticação do usuário: {}", e);
 		}
 		filterChain.doFilter(request, response);
 	}
+	
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
 		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {

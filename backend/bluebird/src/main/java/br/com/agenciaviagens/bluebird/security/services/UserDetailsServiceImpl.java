@@ -8,19 +8,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.agenciaviagens.bluebird.models.entities.Client;
-//import br.com.agenciaviagens.bluebird.models.entities.User;
 import br.com.agenciaviagens.bluebird.models.repositories.ClientRepository;
-//import br.com.agenciaviagens.bluebird.models.repositories.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+	
 	@Autowired
 	ClientRepository clientRepository;
+	
 	@Override
 	@Transactional
-	public UserDetailsImpl loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Client client = clientRepository.findByEmail(email)
-				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + email));
+				.orElseThrow(() -> 
+					new UsernameNotFoundException("Usuário não encontrado pelo e-mail: " + email));
 		return UserDetailsImpl.build(client);
 	}
 }

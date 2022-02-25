@@ -1,22 +1,26 @@
 package br.com.agenciaviagens.bluebird.payload.request;
 
-//import javax.validation.constraints.Email;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class LoginRequest {
+
 	@NotBlank
-//	@Email
+	@Email
+	@Size(max = 30)
 	private String email;
 
 	@NotBlank
+	@Size(max = 100)
 	private String password;
 
-	public String getUsername() {
+	public String getEmail() {
 		return email;
 	}
 
-	public void setUsername(String username) {
-		this.email = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
