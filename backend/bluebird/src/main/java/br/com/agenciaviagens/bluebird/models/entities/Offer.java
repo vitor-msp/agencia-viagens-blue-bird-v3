@@ -9,6 +9,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 public class Offer {
 	
@@ -25,17 +27,18 @@ public class Offer {
 	private float discount;
 	
 	@NotBlank
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
 	private String expiration;
 	
 	public Offer() {}
 	
-	public Offer(Destination destination, @NotBlank float discount, @NotBlank String expiration) {
+	public Offer(Destination destination, @NotBlank @Min(0) @Max(1) float discount, @NotBlank String expiration) {
 		super();
-		setDestination(destination);
-		setDiscount(discount);
-		setExpiration(expiration);
+		this.destination = destination;
+		this.discount = discount;
+		this.expiration = expiration;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
