@@ -22,7 +22,7 @@ public class OffersController{
 	OfferRepository offerRepository;
 	
 	@GetMapping
-	public ResponseEntity<Iterable<OfferResponse>> getDestinations(){
+	public ResponseEntity<Iterable<OfferResponse>> getOffers(){
 
 		List<OfferResponse> offersResponse = new ArrayList<>();
 		for (Offer offer: offerRepository.findAll()) {

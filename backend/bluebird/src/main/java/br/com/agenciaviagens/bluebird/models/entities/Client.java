@@ -1,6 +1,7 @@
 package br.com.agenciaviagens.bluebird.models.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class Client {
 	
 	@NotBlank
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private String birthDate;
+	private Date birthDate;
 	
 	@NotBlank
 	@Email
@@ -53,7 +54,7 @@ public class Client {
 	public Client() {}
 	
 	public Client(@NotBlank @Size(max = 50) String name, @NotBlank @Size(max = 10) String rg,
-			@NotBlank @Size(min = 11, max = 11) String cpf, @NotBlank String birthDate,
+			@NotBlank @Size(min = 11, max = 11) String cpf, @NotBlank Date birthDate,
 			@NotBlank @Email @Size(max = 30) String email, @NotBlank @Size(max = 100) String password) {
 		super();
 		this.name = name;
@@ -88,10 +89,10 @@ public class Client {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getEmail() {

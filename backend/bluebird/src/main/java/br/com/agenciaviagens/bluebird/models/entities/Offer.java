@@ -1,5 +1,7 @@
 package br.com.agenciaviagens.bluebird.models.entities;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,11 +30,11 @@ public class Offer {
 	
 	@NotBlank
 	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-	private String expiration;
+	private Date expiration;
 	
 	public Offer() {}
 	
-	public Offer(Destination destination, @NotBlank @Min(0) @Max(1) float discount, @NotBlank String expiration) {
+	public Offer(Destination destination, @NotBlank @Min(0) @Max(1) float discount, @NotBlank Date expiration) {
 		super();
 		this.destination = destination;
 		this.discount = discount;
@@ -57,10 +59,10 @@ public class Offer {
 	public void setDiscount(float discount) {
 		this.discount = discount;
 	}
-	public String getExpiration() {
+	public Date getExpiration() {
 		return expiration;
 	}
-	public void setExpiration(String expiration) {
+	public void setExpiration(Date expiration) {
 		this.expiration = expiration;
 	}
 }

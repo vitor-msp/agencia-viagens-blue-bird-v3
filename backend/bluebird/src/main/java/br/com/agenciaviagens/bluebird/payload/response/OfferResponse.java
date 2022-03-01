@@ -1,11 +1,13 @@
 package br.com.agenciaviagens.bluebird.payload.response;
 
+import java.util.Date;
+
 public class OfferResponse {
 	
 	private Integer id;
 	private Integer destinationId;
 	private float discount;
-	private String expiration;
+	private Date expiration;
 	
 	public OfferResponse() {}
 	
@@ -27,10 +29,10 @@ public class OfferResponse {
 	public void setDiscount(float discount) {
 		this.discount = discount;
 	}
-	public String getExpiration() {
+	public Date getExpiration() {
 		return expiration;
 	}
-	public void setExpiration(String expiration) {
+	public void setExpiration(Date expiration) {
 		this.expiration = expiration;
 	}
 }

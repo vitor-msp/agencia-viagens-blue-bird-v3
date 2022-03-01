@@ -1,5 +1,7 @@
 package br.com.agenciaviagens.bluebird.payload.request;
 
+import java.util.Date;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -22,7 +24,7 @@ public class RegisterRequest {
 	
 	@NotBlank
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private String birthDate;
+	private Date birthDate;
 	
 	@NotBlank
 	@Email
@@ -51,10 +53,10 @@ public class RegisterRequest {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getEmail() {

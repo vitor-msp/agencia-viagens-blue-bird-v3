@@ -1,5 +1,7 @@
 package br.com.agenciaviagens.bluebird.models.entities;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Trip {
@@ -21,25 +25,28 @@ public class Trip {
 	private Destination destination;
 	
 	@NotBlank
-	private String departure;
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	private Date departure;
 	
 	@NotBlank
-	private String arrival;
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	private Date arrival;
 	
 	@NotBlank
 	@Min(0)
 	private Double defaultValue;
 	
 	public Trip() {}
-	public Trip(@NotNull Destination destination, @NotBlank String departure, @NotBlank String arrival,
-			@NotBlank Double defaultValue) {
+
+	public Trip(@NotNull Destination destination, @NotBlank Date departure, @NotBlank Date arrival,
+			@NotBlank @Min(0) Double defaultValue) {
 		super();
-		setDestination(destination);
-		setDeparture(departure);
-		setArrival(arrival);
-		setDefaultValue(defaultValue);
+		this.destination = destination;
+		this.departure = departure;
+		this.arrival = arrival;
+		this.defaultValue = defaultValue;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -52,16 +59,16 @@ public class Trip {
 	public void setDestination(Destination destination) {
 		this.destination = destination;
 	}
-	public String getDeparture() {
+	public Date getDeparture() {
 		return departure;
 	}
-	public void setDeparture(String departure) {
+	public void setDeparture(Date departure) {
 		this.departure = departure;
 	}
-	public String getArrival() {
+	public Date getArrival() {
 		return arrival;
 	}
-	public void setArrival(String arrival) {
+	public void setArrival(Date arrival) {
 		this.arrival = arrival;
 	}
 	public Double getDefaultValue() {
