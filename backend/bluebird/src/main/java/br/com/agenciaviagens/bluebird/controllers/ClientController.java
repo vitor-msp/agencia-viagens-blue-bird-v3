@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.agenciaviagens.bluebird.models.entities.Client;
 import br.com.agenciaviagens.bluebird.models.repositories.ClientRepository;
+import br.com.agenciaviagens.bluebird.payload.request.ChangePasswordRequest;
 import br.com.agenciaviagens.bluebird.payload.request.ClientRequest;
 import br.com.agenciaviagens.bluebird.payload.response.MessageResponse;
 import br.com.agenciaviagens.bluebird.security.jwt.JwtUtils;
@@ -73,6 +73,42 @@ public class ClientController{
 			System.out.println(e);
 			return ResponseEntity.badRequest()
 					.body(new MessageResponse("Erro na atualização dos dados!"));
+		}		
+	}
+
+
+	@PutMapping("/password")
+	public ResponseEntity<?> putPassword(
+			@RequestHeader("Authorization") String token,
+			@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
+		
+		token = token.substring(7, token.length());
+		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+		
+		Optional<Client> clientOpt = clientRepository.findByEmail(clientEmail);
+		if(clientOpt.isEmpty()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro: Cliente não encontrado!"));
+		}
+		
+		Client client = clientOpt.get();
+		if(validatePassword(client, changePasswordRequest.getOldPassword())) {
+		
+			client.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
+
+		}else {			
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro: Cliente não autorizado a alterar a senha!"));
+		}
+		
+		try {
+			 clientRepository.save(client);
+			return ResponseEntity.ok(new MessageResponse("Senha atualizada com sucesso!"));
+		
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro na atualização da senha!"));
 		}		
 	}
 }
