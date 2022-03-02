@@ -34,6 +34,15 @@ public class Purchase {
 		setOffer(offer);
 	}
 	
+	public boolean clientIsValid(Client client) {
+		
+		if(this.getClient() != null && this.getClient().getId() == client.getId()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

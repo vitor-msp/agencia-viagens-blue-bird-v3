@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -97,6 +98,43 @@ public class PurchasesController{
 			System.out.println(e);
 			return ResponseEntity.badRequest()
 					.body(new MessageResponse("Erro ao adquirir a viagem!"));
+		}		
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<?> deletePurchase(
+			@RequestHeader("Authorization") String token,
+			@RequestParam(name = "purchase") Integer purchaseId){
+		
+		token = token.substring(7, token.length());
+		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+		
+		Optional<Client> client = clientRepository.findByEmail(clientEmail);
+		if(client.isEmpty()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro: Cliente não encontrado!"));
+		}
+		
+		Optional<Purchase> purchase = purchaseRepository.findById(purchaseId);
+		if(purchase.isEmpty()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro: Viagem não encontrada!"));
+		}
+		
+		if(!purchase.get().clientIsValid(client.get())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro: Cliente não autorizado a cancelar esta viagem!"));
+		}
+		
+		try {
+			
+			purchaseRepository.deleteById(purchase.get().getId());
+			return ResponseEntity.ok(new MessageResponse("Viagem cancelada com sucesso!"));
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro ao cancelar a viagem!"));
 		}		
 	}
 }
