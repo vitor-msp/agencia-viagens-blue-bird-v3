@@ -40,6 +40,24 @@ public class Offer {
 		this.discount = discount;
 		this.expiration = expiration;
 	}
+	
+	public boolean destinationIsValid(Destination destination) {
+		
+		if(this.getDestination() != null && 
+				this.getDestination().getId() != destination.getId()) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean tripIsValid(Trip trip) {
+		
+		if(this.getDestination() != null && 
+				this.getDestination().getId() != trip.getDestination().getId()) {
+			return false;
+		}
+		return true;
+	}
 
 	public Integer getId() {
 		return id;

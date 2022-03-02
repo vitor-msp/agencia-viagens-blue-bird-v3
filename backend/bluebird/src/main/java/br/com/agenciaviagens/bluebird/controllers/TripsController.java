@@ -36,7 +36,7 @@ public class TripsController{
 	@GetMapping
 	public ResponseEntity<Iterable<TripResponse>> getTrips(
 			@RequestParam(name = "destination") Integer destinationId,
-			@RequestParam(name = "offer", defaultValue = "") Integer offerId){
+			@RequestParam(name = "offer", required = false) Integer offerId){
 		
 		Optional<Destination> destination = destinationRepository.findById(destinationId);
 		List<Trip> trips = destination.get().getTrips();
@@ -44,8 +44,7 @@ public class TripsController{
 		if(offerId != null) {
 			Optional<Offer> offer = offerRepository.findById(offerId);
 			
-			if(offer.get().getDestination() != null && 
-					offer.get().getDestination().getId() != destination.get().getId()) {
+			if(!offer.get().destinationIsValid(destination.get())) {
 
 				trips.clear();
 				

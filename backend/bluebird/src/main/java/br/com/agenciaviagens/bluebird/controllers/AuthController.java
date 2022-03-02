@@ -44,6 +44,7 @@ public class AuthController {
 	public ResponseEntity<?> authenticateClient(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
@@ -51,8 +52,8 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(),
 												 userDetails.getUsername()));
-				
 	}
+	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerClient(@Valid @RequestBody RegisterRequest registerRequest) {
 

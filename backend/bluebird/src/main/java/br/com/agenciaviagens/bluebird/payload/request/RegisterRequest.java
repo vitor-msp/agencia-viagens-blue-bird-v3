@@ -32,7 +32,7 @@ public class RegisterRequest {
 	private String email;
 	
 	@NotBlank
-	@Size(max = 100)
+	@Size(max = 30)
 	private String password;
 
 	public String getName() {
