@@ -1,9 +1,6 @@
 package br.com.agenciaviagens.bluebird.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.agenciaviagens.bluebird.models.entities.Client;
-import br.com.agenciaviagens.bluebird.models.entities.Destination;
 import br.com.agenciaviagens.bluebird.models.entities.Offer;
 import br.com.agenciaviagens.bluebird.models.entities.Purchase;
 import br.com.agenciaviagens.bluebird.models.entities.Trip;
 import br.com.agenciaviagens.bluebird.models.repositories.ClientRepository;
-import br.com.agenciaviagens.bluebird.models.repositories.DestinationRepository;
 import br.com.agenciaviagens.bluebird.models.repositories.OfferRepository;
 import br.com.agenciaviagens.bluebird.models.repositories.PurchaseRepository;
 import br.com.agenciaviagens.bluebird.models.repositories.TripRepository;
 import br.com.agenciaviagens.bluebird.payload.response.MessageResponse;
-import br.com.agenciaviagens.bluebird.payload.response.TripResponse;
 import br.com.agenciaviagens.bluebird.security.jwt.JwtUtils;
 
 @RestController
