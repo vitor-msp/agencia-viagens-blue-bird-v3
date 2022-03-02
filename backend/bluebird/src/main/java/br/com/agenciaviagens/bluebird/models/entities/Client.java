@@ -16,11 +16,14 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Client {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private Integer id;
 	
 	@NotBlank
@@ -45,9 +48,11 @@ public class Client {
 	
 	@NotBlank
 	@Size(max = 100)
+	@JsonIgnore
 	private String password;
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Purchase> purchases;
 
 	public Client() {}
