@@ -29,14 +29,6 @@ public class Contact {
 	private String body;
 	
 	public Contact() {}
-	
-	public Contact(@NotBlank @Email @Size(max = 30) String email, @NotBlank @Size(max = 100) String subject,
-			@NotBlank @Size(max = 1000) String body) {
-		super();
-		this.email = email;
-		this.subject = subject;
-		this.body = body;
-	}
 
 	public Integer getId() {
 		return id;

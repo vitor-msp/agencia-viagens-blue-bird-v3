@@ -3,7 +3,6 @@ package br.com.agenciaviagens.bluebird.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,15 +43,13 @@ public class TripsController{
 		if(offerId != null) {
 			Optional<Offer> offer = offerRepository.findById(offerId);
 			
-			if(!offer.get().destinationIsValid(destination.get())) {
-
-				trips.clear();
+			if(offer.get().destinationIsValid(destination.get())) {
 				
+				trips = offer.get().validTrips(trips);
+
 			}else {
-				trips = trips.stream()
-					.filter(t -> 
-						t.getDeparture().before(offer.get().getExpiration()))
-					.collect(Collectors.toList());
+				
+				trips.clear();
 			}
 			
 		}

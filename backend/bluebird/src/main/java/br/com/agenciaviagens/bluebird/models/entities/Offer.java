@@ -1,6 +1,8 @@
 package br.com.agenciaviagens.bluebird.models.entities;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,6 +62,13 @@ public class Offer {
 			return false;
 		}
 		return true;
+	}
+	
+	public List<Trip> validTrips(List<Trip> trips){
+		return trips.stream()
+				.filter(t -> 
+				t.getDeparture().before(this.getExpiration()))
+				.collect(Collectors.toList());
 	}
 
 	public Integer getId() {

@@ -36,17 +36,13 @@ export function FormContact() {
       setSpinner(true);
       setTimeout(async () => {
         try {
-          if (await contact(Object.assign({}, fields))) {
+          let res = await contact(Object.assign({}, fields));
+          if (res.status === 200) {
             setShowValidations((prev) => (prev === false ? null : false));
             setFields(objDefaultFields);
-            dispatch(
-              updateModalInfo(
-                "Agradecemos o seu contato!! Em breve retornaremos.",
-                true
-              )
-            );
+            dispatch(updateModalInfo(res.data.message, true));
           } else {
-            dispatch(updateModalInfo("Falha no envio do formulário!", false));
+            dispatch(updateModalInfo(res.data.message, false));
           }
         } catch {
           dispatch(

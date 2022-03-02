@@ -3,11 +3,16 @@ import axios from "axios";
 const port = 8080;
 
 const api = axios.create({
-  baseURL: `http://localhost:${port}/AgenciaViagens/`,
+  baseURL: `http://192.168.0.13:${port}/`,
   headers: {
     "Content-type": "application/json",
   },
 });
+
+export const contact = async (contact) => {
+  const res = await api.post(`/contacts`, contact);
+  return res;
+};
 
 export const getDestinations = async () => {
   const res = await api.get(`/destinations`);
@@ -63,10 +68,5 @@ export const getPurchases = async (client) => {
 
 export const deletePurchase = async (purchaseToDelete) => {
   const res = await api.post(`/deletePurchase`, purchaseToDelete);
-  return res.data;
-};
-
-export const contact = async (contact) => {
-  const res = await api.post(`/contact`, contact);
   return res.data;
 };
