@@ -137,4 +137,20 @@ public class PurchasesController{
 					.body(new MessageResponse("Erro ao cancelar a viagem!"));
 		}		
 	}
+	
+	@GetMapping
+	public ResponseEntity<?> getMyPurchases(
+			@RequestHeader("Authorization") String token){
+
+		token = token.substring(7, token.length());
+		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+		
+		Optional<Client> client = clientRepository.findByEmail(clientEmail);
+		if(client.isEmpty()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Erro: Cliente não encontrado!"));
+		}
+		
+		return ResponseEntity.ok(client.get().getPurchases());
+	}
 }

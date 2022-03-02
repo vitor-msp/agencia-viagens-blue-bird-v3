@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Purchase {
 	
@@ -16,6 +18,7 @@ public class Purchase {
 	
 	@NotNull
 	@ManyToOne
+	@JsonIgnore
 	private Client client;
 	
 	@NotNull

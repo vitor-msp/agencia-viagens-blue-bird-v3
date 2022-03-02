@@ -13,6 +13,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Offer {
 	
@@ -21,6 +23,7 @@ public class Offer {
 	private Integer id;
 	
 	@ManyToOne
+	@JsonIgnore
 	private Destination destination;
 	
 	@NotBlank
