@@ -9,7 +9,7 @@ import { formatDateTime } from "../helpers/formatDateTime";
 export function Offer({ offer }) {
   const { discount, expiration } = offer;
   const destination = useSelector((state) => {
-    return state.destinations.find(({ id }) => id === offer.destination.id);
+    return state.destinations.find(({ id }) => id === offer.destinationId);
   });
   const { city, uf } =
     destination === undefined
@@ -22,9 +22,9 @@ export function Offer({ offer }) {
 
   const handleSelect = async () => {
     dispatch(updateCurrentOffer(offer.id));
-    if (offer.destination.id !== null) {
+    if (offer.destinationId !== null) {
       try {
-        dispatch(updateTrips(await getTrips(offer.destination.id, offer.id)));
+        dispatch(updateTrips(await getTrips(offer.destinationId, offer.id)));
       } catch {
         dispatch(
           updateModalInfo("Falha na comunicação com o servidor!", false)
@@ -54,7 +54,7 @@ export function Offer({ offer }) {
           </span>
         </p>
         <Link
-          to={offer.destination.id === null ? "/Destinos" : "/Viagens"}
+          to={offer.destinationId === null ? "/Destinos" : "/Viagens"}
           onClick={handleSelect}
           className="btn btn-outline-primary"
         >

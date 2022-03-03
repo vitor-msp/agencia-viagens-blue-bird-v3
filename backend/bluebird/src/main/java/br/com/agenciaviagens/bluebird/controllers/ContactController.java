@@ -16,8 +16,8 @@ import br.com.agenciaviagens.bluebird.payload.response.MessageResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/contacts")
-public class ContactsController{
+@RequestMapping("/contact")
+public class ContactController{
 
 	@Autowired
 	ContactRepository contactRepository;
@@ -31,10 +31,8 @@ public class ContactsController{
 
 		} catch (Exception e) {
 
-			System.out.println(e);
 			return ResponseEntity.badRequest()
 					.body(new MessageResponse("Erro ao efetuar o contato!"));
-		
 		}
 	}
 }

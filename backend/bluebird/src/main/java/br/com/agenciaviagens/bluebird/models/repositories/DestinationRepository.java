@@ -9,6 +9,4 @@ import br.com.agenciaviagens.bluebird.models.entities.Destination;
 
 public interface DestinationRepository extends PagingAndSortingRepository<Destination, Integer> {
 
-//	Page<Destination> findAll(Pageable page);
-
 }

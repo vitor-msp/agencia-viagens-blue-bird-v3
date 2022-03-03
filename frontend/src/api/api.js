@@ -10,25 +10,27 @@ const api = axios.create({
 });
 
 export const contact = async (contact) => {
-  const res = await api.post(`/contacts`, contact);
+  const res = await api
+    .post(`/contact`, contact)
+    .then((res) => res)
+    .catch((error) => error.response);
   return res;
 };
 
 export const getDestinations = async () => {
-  const res = await api.get(`/destinations`);
-  return res.data;
+  const res = await api
+    .get(`/destinations`)
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
 export const getOffers = async () => {
-  const res = await api.get(`/offers`);
-  return res.data.map((offer) => {
-    return {
-      ...offer,
-      destination: {
-        id: offer.destination.id === 0 ? null : offer.destination.id,
-      },
-    };
-  });
+  const res = await api
+    .get(`/offers`)
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
 export const getTrips = async (destination, offer) => {
