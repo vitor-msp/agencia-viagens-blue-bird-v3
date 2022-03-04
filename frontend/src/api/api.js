@@ -33,9 +33,17 @@ export const getOffers = async () => {
   return res;
 };
 
-export const getTrips = async (destination, offer) => {
-  const res = await api.get(`/trips?d=${destination}&o=${offer}`);
-  return res.data;
+export const getTrips = async (destinationId, offerId) => {
+  const res = await api
+    .get(`/trips`, {
+      params: {
+        destinationId,
+        offerId,
+      },
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
 export const createClient = async (client) => {

@@ -11,7 +11,12 @@ export function Destination({ destination }) {
 
   const handleSelect = async () => {
     try {
-      dispatch(updateTrips(await getTrips(destination.id, currentOffer)));
+      const res = await getTrips(destination.id, currentOffer);
+      if (res.status === 200) {
+        dispatch(updateTrips(res.data));
+      } else {
+        dispatch(updateModalInfo("Erro ao obter as viagens!", false));
+      }
     } catch {
       dispatch(updateModalInfo("Falha na comunicação com o servidor!", false));
       dispatch(updateTrips([]));

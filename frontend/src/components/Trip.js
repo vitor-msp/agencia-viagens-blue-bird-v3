@@ -6,7 +6,7 @@ import { formatDateTime } from "../helpers/formatDateTime";
 export function Trip({ trip }) {
   const { departure, arrival, defaultValue } = trip;
   const destination = useSelector((state) => {
-    return state.destinations.find(({ id }) => id === trip.destination.id);
+    return state.destinations.find(({ id }) => id === trip.destinationId);
   });
   const { city, uf, landingPlace } = destination;
   const offer = useSelector((state) => {

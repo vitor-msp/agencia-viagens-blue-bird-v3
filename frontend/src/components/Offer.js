@@ -24,7 +24,12 @@ export function Offer({ offer }) {
     dispatch(updateCurrentOffer(offer.id));
     if (destinationId !== null) {
       try {
-        dispatch(updateTrips(await getTrips(destinationId, offer.id)));
+        const res = await getTrips(destinationId, offer.id);
+        if (res.status === 200) {
+          dispatch(updateTrips(res.data));
+        } else {
+          dispatch(updateModalInfo("Erro ao obter as viagens!", false));
+        }
       } catch {
         dispatch(
           updateModalInfo("Falha na comunicação com o servidor!", false)
