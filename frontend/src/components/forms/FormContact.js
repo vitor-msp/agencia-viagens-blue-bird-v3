@@ -40,9 +40,9 @@ export function FormContact() {
           if (res.status === 200) {
             setShowValidations((prev) => (prev === false ? null : false));
             setFields(objDefaultFields);
-            dispatch(updateModalInfo(res.data.message, true));
+            dispatch(updateModalInfo("Contato efetuado com sucesso!", true));
           } else {
-            dispatch(updateModalInfo(res.data.message, false));
+            dispatch(updateModalInfo("Erro ao efetuar o contato!", false));
           }
         } catch {
           dispatch(

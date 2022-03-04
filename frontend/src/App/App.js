@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ModalTrip } from "../components/modals/ModalTrip";
 import { ModalInfo } from "../components/modals/ModalInfo";
 import { ModalLogin } from "../components/modals/ModalLogin";
@@ -12,11 +12,36 @@ import { OffersPage } from "../pages/OffersPage";
 import { TripsPage } from "../pages/TripsPage";
 import { MyTripsPage } from "../pages/MyTripsPage";
 import { MyAccountPage } from "../pages/MyAccountPage";
+import { useEffect } from "react";
+import { getDestinations } from "../api/api";
+import { updateAllDestinations } from "../store/actions/destinations.actions";
+import { updateModalInfo } from "../store/actions/modalInfo.actions";
 
 function App() {
   const modalTripContent = useSelector((state) => state.modalTripContent);
   const modalInfo = useSelector((state) => state.modalInfo);
   const modalLogin = useSelector((state) => state.modalLogin);
+  const destinations = useSelector((state) => state.destinations);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const reqDestinations = async () => {
+      try {
+        let res = await getDestinations();
+        if (res.status === 200) {
+          dispatch(updateAllDestinations(res.data));
+        } else {
+          dispatch(updateModalInfo("Erro ao obter os destinos!", false));
+        }
+      } catch (error) {
+        dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
+      }
+    };
+
+    if (destinations.length === 0) {
+      reqDestinations();
+    }
+  }, []);
 
   return (
     <BrowserRouter basename="/AgenciaViagens">

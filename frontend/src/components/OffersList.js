@@ -10,20 +10,20 @@ export function OffersList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getData = async () => {
+    const reqOffers = async () => {
       try {
         let res = await getOffers();
         if (res.status === 200) {
           dispatch(updateAllOffers(res.data));
         } else {
-          dispatch(updateModalInfo(res.data.message, false));
+          dispatch(updateModalInfo("Erro ao obter as promoções!", false));
         }
       } catch (error) {
         dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
       }
     };
     if (offers.length === 0) {
-      getData();
+      reqOffers();
     }
   }, []);
 

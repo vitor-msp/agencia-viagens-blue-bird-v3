@@ -7,24 +7,24 @@ import { getTrips } from "../api/api";
 import { formatDateTime } from "../helpers/formatDateTime";
 
 export function Offer({ offer }) {
-  const { discount, expiration } = offer;
+  const { discount, expiration, destinationId } = offer;
   const destination = useSelector((state) => {
-    return state.destinations.find(({ id }) => id === offer.destinationId);
+    return state.destinations.find(({ id }) => id === destinationId);
   });
   const { city, uf } =
     destination === undefined
       ? {
-          city: "-",
-          uf: "-",
+          city: "",
+          uf: "",
         }
       : destination;
   const dispatch = useDispatch();
 
   const handleSelect = async () => {
     dispatch(updateCurrentOffer(offer.id));
-    if (offer.destinationId !== null) {
+    if (destinationId !== null) {
       try {
-        dispatch(updateTrips(await getTrips(offer.destinationId, offer.id)));
+        dispatch(updateTrips(await getTrips(destinationId, offer.id)));
       } catch {
         dispatch(
           updateModalInfo("Falha na comunicação com o servidor!", false)
@@ -48,13 +48,13 @@ export function Offer({ offer }) {
         <p className="card-title text-end">em viagens para</p>
         <p className="card-title text-end mb-3">
           <span style={{ fontWeight: "600" }}>
-            {city === "-"
+            {destinationId === null
               ? "QUALQUER DESTINO"
               : `${city.toUpperCase()} - ${uf.toUpperCase()}`}
           </span>
         </p>
         <Link
-          to={offer.destinationId === null ? "/Destinos" : "/Viagens"}
+          to={destinationId === null ? "/Destinos" : "/Viagens"}
           onClick={handleSelect}
           className="btn btn-outline-primary"
         >
