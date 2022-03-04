@@ -12,7 +12,7 @@ export function OffersList() {
   useEffect(() => {
     const reqOffers = async () => {
       try {
-        let res = await getOffers();
+        const res = await getOffers();
         if (res.status === 200) {
           dispatch(updateAllOffers(res.data));
         } else {

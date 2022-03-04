@@ -57,20 +57,26 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<?> registerClient(@Valid @RequestBody RegisterRequest registerRequest) {
 
-		if (clientRepository.existsByEmail(registerRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Erro: Email já cadastrado!"));
-		}
-		Client client = new Client(
-				registerRequest.getName(),
-				registerRequest.getRg(),
-				registerRequest.getCpf(),
-				registerRequest.getBirthDate(),
-				registerRequest.getEmail(),
-				encoder.encode(registerRequest.getPassword()));
+		try {
+			if (clientRepository.existsByEmail(registerRequest.getEmail())) {
+				return ResponseEntity
+						.badRequest()
+						.body(new MessageResponse("emailJaEmUso"));
+			}
+			Client client = new Client(
+					registerRequest.getName(),
+					registerRequest.getRg(),
+					registerRequest.getCpf(),
+					registerRequest.getBirthDate(),
+					registerRequest.getEmail(),
+					encoder.encode(registerRequest.getPassword()));
+	
+			clientRepository.save(client);
+			return ResponseEntity.ok(new MessageResponse("Usuário cadastrado com sucesso!"));
+			
+		} catch (Exception e) {
 
-		clientRepository.save(client);
-		return ResponseEntity.ok(new MessageResponse("Usuário cadastrado com sucesso!"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Erro ao efetuar o cadastro!"));
+		}
 	}
 }

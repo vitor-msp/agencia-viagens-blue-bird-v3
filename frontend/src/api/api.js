@@ -47,8 +47,11 @@ export const getTrips = async (destinationId, offerId) => {
 };
 
 export const createClient = async (client) => {
-  const res = await api.post(`/client`, client);
-  return res.data;
+  const res = await api
+    .post(`/auth/register`, client)
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
 export const updateClient = async (client) => {

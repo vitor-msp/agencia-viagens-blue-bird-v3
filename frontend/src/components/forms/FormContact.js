@@ -36,7 +36,7 @@ export function FormContact() {
       setSpinner(true);
       setTimeout(async () => {
         try {
-          let res = await contact(Object.assign({}, fields));
+          const res = await contact(Object.assign({}, fields));
           if (res.status === 200) {
             setShowValidations((prev) => (prev === false ? null : false));
             setFields(objDefaultFields);

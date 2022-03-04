@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     const reqDestinations = async () => {
       try {
-        let res = await getDestinations();
+        const res = await getDestinations();
         if (res.status === 200) {
           dispatch(updateAllDestinations(res.data));
         } else {

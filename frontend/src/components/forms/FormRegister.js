@@ -35,15 +35,21 @@ export function FormRegister() {
       setSpinner(true);
       setTimeout(async () => {
         try {
-          if (await createClient(fields)) {
+          const res = await createClient(fields);
+          if (res.status === 200) {
             dispatch(
               updateModalInfo("Sua conta foi criada com sucesso!!", true)
             );
             document.getElementById("navLoginModal").click();
-          } else {
+          } else if (
+            res.status === 400 &&
+            res.data.message.trim() === "emailJaEmUso"
+          ) {
             dispatch(
               updateModalInfo("O e-mail selecionado já está em uso!", false)
             );
+          } else {
+            dispatch(updateModalInfo("Erro ao efetuar o cadastro!", false));
           }
         } catch {
           dispatch(
