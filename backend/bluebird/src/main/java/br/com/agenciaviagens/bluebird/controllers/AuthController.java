@@ -19,7 +19,7 @@ import br.com.agenciaviagens.bluebird.models.entities.Client;
 import br.com.agenciaviagens.bluebird.models.repositories.ClientRepository;
 import br.com.agenciaviagens.bluebird.payload.request.LoginRequest;
 import br.com.agenciaviagens.bluebird.payload.request.RegisterRequest;
-import br.com.agenciaviagens.bluebird.payload.response.JwtResponse;
+import br.com.agenciaviagens.bluebird.payload.response.ClientResponse;
 import br.com.agenciaviagens.bluebird.payload.response.MessageResponse;
 import br.com.agenciaviagens.bluebird.security.jwt.JwtUtils;
 import br.com.agenciaviagens.bluebird.security.services.UserDetailsImpl;
@@ -52,11 +52,13 @@ public class AuthController {
 			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateJwtToken(authentication);
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			
-			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-			return ResponseEntity.ok(new JwtResponse(jwt, 
-													 userDetails.getId(),
-													 userDetails.getUsername()));
+			ClientResponse clientResponse = new ClientResponse(
+					clientRepository.findByEmail(userDetails.getUsername()).get(), jwt, "Bearer");
+			
+			return ResponseEntity.ok(clientResponse);
+			
 		} catch (BadCredentialsException e) {
 
 			return ResponseEntity.badRequest().body(new MessageResponse("emailOuSenhaIncorretos"));

@@ -12,6 +12,7 @@ export function Navbar() {
   const dispatch = useDispatch();
 
   const logout = () => {
+    // excluir token
     dispatch(clearClientData());
     dispatch(clearMyPurchases());
   };
@@ -91,7 +92,7 @@ export function Navbar() {
                   Promoções
                 </NavLink>
               </li>
-              {clientData.name !== null && (
+              {clientData.email !== null && (
                 <>
                   <li className="nav-item">
                     <NavLink

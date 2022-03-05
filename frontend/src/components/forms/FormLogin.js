@@ -33,7 +33,7 @@ export function FormLogin({ closeModal }) {
         try {
           const res = await login(fields);
           if (res.status === 200) {
-            // dispatch(updateClientData(res.data));
+            dispatch(updateClientData(res.data.client));
             closeModal();
             dispatch(updateModalInfo("Login efetuado com sucesso!!", true));
             // const purchases = await getPurchases({

@@ -1,7 +1,12 @@
+import { formatDate } from "../../helpers/formatDateTime";
+
 export const updateClientData = (clientData) => {
   return {
     type: "updateClientData",
-    payload: clientData,
+    payload: {
+      ...clientData,
+      birthDate: formatDate(clientData.birthDate)
+    },
   };
 };
 

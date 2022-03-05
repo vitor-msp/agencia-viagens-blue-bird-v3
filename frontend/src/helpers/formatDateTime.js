@@ -13,6 +13,17 @@ export const formatDateTime = (fullDateTime) => {
   return `${time} ${date}`;
 };
 
+export const formatDate = (fullDateTime) => {
+  const dateTime = new Date(fullDateTime);
+
+  const date = `
+  ${addLeftZero(dateTime.getFullYear(), 4)}-${addLeftZero(
+    dateTime.getMonth() + 1
+  )}-${addLeftZero(dateTime.getDate())}`;
+
+  return date.trim();
+};
+
 const addLeftZero = (number, size = 2) => {
   const len = number.toString().length;
   let formatNumber = ``;
