@@ -100,38 +100,39 @@ public class PurchasesController{
 	@DeleteMapping
 	public ResponseEntity<?> deletePurchase(
 			@RequestHeader("Authorization") String token,
-			@RequestParam(name = "purchase") Integer purchaseId){
-		
-		token = token.substring(7, token.length());
-		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
-		
-		Optional<Client> client = clientRepository.findByEmail(clientEmail);
-		if(client.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não encontrado!"));
-		}
-		
-		Optional<Purchase> purchase = purchaseRepository.findById(purchaseId);
-		if(purchase.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Viagem não encontrada!"));
-		}
-		
-		if(!purchase.get().clientIsValid(client.get())) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não autorizado a cancelar esta viagem!"));
-		}
+			@RequestParam(name = "purchaseId") Integer purchaseId){
 		
 		try {
+		
+			token = token.substring(7, token.length());
+			String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+			
+			Optional<Client> client = clientRepository.findByEmail(clientEmail);
+			if(client.isEmpty()) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Cliente não encontrado!"));
+			}
+			
+			Optional<Purchase> purchase = purchaseRepository.findById(purchaseId);
+			if(purchase.isEmpty()) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Viagem não encontrada!"));
+			}
+			
+			if(!purchase.get().clientIsValid(client.get())) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Cliente não autorizado a cancelar esta viagem!"));
+			}
 			
 			purchaseRepository.deleteById(purchase.get().getId());
-			return ResponseEntity.ok(new MessageResponse("Viagem cancelada com sucesso!"));
 			
+			return ResponseEntity.ok(new MessageResponse("Viagem cancelada com sucesso!"));
+				
 		} catch (Exception e) {
-			System.out.println(e);
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro ao cancelar a viagem!"));
-		}		
+			
+			return ResponseEntity.internalServerError().body(
+					new MessageResponse("Erro ao cancelar a viagem!"));
+		}
 	}
 	
 	@GetMapping

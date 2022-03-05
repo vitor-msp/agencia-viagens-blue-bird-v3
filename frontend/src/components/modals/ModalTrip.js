@@ -17,7 +17,7 @@ export function ModalTrip({ content }) {
   const [modalOpen, setModalOpen] = useState(true);
   const [showAuth, setShowAuth] = useState(false);
   const [spinner, setSpinner] = useState(false);
-  const { trip, destination, offer, isGetPurchase, purchase } = content;
+  const { trip, destination, offer, isGetPurchase, purchaseId } = content;
   const { defaultValue, departure, arrival } = trip;
   const { city, uf, landingPlace } = destination;
   const { id, discount, expiration } =
@@ -88,29 +88,19 @@ export function ModalTrip({ content }) {
   const handleDeletePurchase = (pass) => {
     setSpinner(true);
     setTimeout(async () => {
-      const purchaseToDelete = {
-        purchase: {
-          id: purchase,
-        },
-        client: {
-          ...purchaseToPost.client,
-          password: pass,
-        },
-      };
       try {
-        if (await deletePurchase(purchaseToDelete)) {
-          dispatch(removePurchase(purchase));
+        const res = await deletePurchase(purchaseId);
+        if (res.status === 200) {
+          dispatch(removePurchase(purchaseId));
           handleClose();
           dispatch(updateModalInfo("Viagem cancelada com sucesso!!", true));
         } else {
-          dispatch(updateModalInfo("Senha incorreta!", false));
+          dispatch(updateModalInfo("Erro ao cancelar a viagem!", false));
           setSpinner(false);
         }
       } catch {
         setSpinner(false);
-        dispatch(
-          updateModalInfo("Falha na comunicação com o servidor!", false)
-        );
+        dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
       }
     }, 1000);
   };

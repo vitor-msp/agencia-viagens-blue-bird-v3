@@ -93,8 +93,21 @@ export const setPassword = async (client) => {
 
 export const getPurchases = async () => {
   const res = await api
-    .get(`/purchases`,  {
+    .get(`/purchases`, {
       headers: configToken(),
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
+};
+
+export const deletePurchase = async (purchaseId) => {
+  const res = await api
+    .delete(`/purchases`, {
+      headers: configToken(),
+      params: {
+        purchaseId,
+      },
     })
     .then((res) => res)
     .catch((error) => error.response);
@@ -103,10 +116,5 @@ export const getPurchases = async () => {
 
 export const postPurchase = async (purchaseToPost) => {
   const res = await api.post(`/postPurchase`, purchaseToPost);
-  return res.data;
-};
-
-export const deletePurchase = async (purchaseToDelete) => {
-  const res = await api.post(`/deletePurchase`, purchaseToDelete);
   return res.data;
 };

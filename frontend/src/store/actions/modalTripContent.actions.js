@@ -3,7 +3,7 @@ export const updateModalTripContent = (
   destination,
   offer,
   isGetPurchase,
-  purchase = null
+  purchaseId = null
 ) => {
   return {
     type: "updateModalTripContent",
@@ -12,7 +12,7 @@ export const updateModalTripContent = (
       destination,
       offer,
       isGetPurchase,
-      purchase,
+      purchaseId,
     },
   };
 };
