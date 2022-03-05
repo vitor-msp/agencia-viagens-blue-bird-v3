@@ -51,7 +51,6 @@ export function FormMyAccount() {
       clientToUpdate.password = pass;
       try {
         const res = await updateClient(clientToUpdate);
-        console.log(clientToUpdate)
         if (res.status === 200) {
           dispatch(updateClientData(fields));
           dispatch(updateModalInfo("Dados atualizados com sucesso!!", true));

@@ -82,8 +82,13 @@ export const updateClient = async (client) => {
 };
 
 export const setPassword = async (client) => {
-  const res = await api.post(`/setPassword`, client);
-  return res.data;
+  const res = await api
+    .put(`/client/password`, client, {
+      headers: configToken(),
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
 export const postPurchase = async (purchaseToPost) => {

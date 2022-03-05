@@ -10,9 +10,9 @@ import { setPassword } from "../../api/api";
 
 export function FormSetPassword({ modalClose }) {
   const objDefaultFields = {
-    id: useSelector((state) => state.clientData.id),
-    email: useSelector((state) => state.clientData.email),
-    password: null,
+    // id: useSelector((state) => state.clientData.id),
+    // email: useSelector((state) => state.clientData.email),
+    oldPassword: null,
     newPassword: null,
   };
 
@@ -32,14 +32,20 @@ export function FormSetPassword({ modalClose }) {
       setTimeout(async () => {
         const clientToUpdate = Object.assign({}, fields);
         try {
-          if (await setPassword(clientToUpdate)) {
+          const res = await setPassword(clientToUpdate)
+          if (res.status === 200) {
             dispatch(updateModalInfo("Senha alterada com sucesso!!", true));
-          } else {
+          }else if (
+            res.status === 400 &&
+            res.data.message.trim() === "senhaIncorreta"
+          ){
             dispatch(updateModalInfo("Senha incorreta!", false));
+          } else {
+            dispatch(updateModalInfo("Erro na atualização da senha!", false));
           }
         } catch {
           dispatch(
-            updateModalInfo("Falha na comunicação com o servidor!", false)
+            updateModalInfo("Erro na comunicação com o servidor!", false)
           );
         }
         modalClose();
@@ -60,7 +66,7 @@ export function FormSetPassword({ modalClose }) {
           handleFieldChange={(value) => {
             setFields({
               ...fields,
-              password: value,
+              oldPassword: value,
             });
           }}
           disabled={disableFields}

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -39,23 +38,6 @@ public class ClientController{
 	public boolean validatePassword(Client client, String password){
 		
 			return encoder.matches(password, client.getPassword());
-	}
-	
-	@GetMapping
-	public ResponseEntity<?> getClient(
-			@RequestHeader("Authorization") String token){
-		
-		token = token.substring(7, token.length());
-		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
-		
-		Optional<Client> clientOpt = clientRepository.findByEmail(clientEmail);
-		if(clientOpt.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não encontrado!"));
-			
-		}else {
-			return ResponseEntity.ok(clientOpt.get());
-		}
 	}
 	
 	@PutMapping
@@ -102,33 +84,35 @@ public class ClientController{
 			@RequestHeader("Authorization") String token,
 			@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
 		
-		token = token.substring(7, token.length());
-		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
-		
-		Optional<Client> clientOpt = clientRepository.findByEmail(clientEmail);
-		if(clientOpt.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não encontrado!"));
-		}
-		
-		Client client = clientOpt.get();
-		if(validatePassword(client, changePasswordRequest.getOldPassword())) {
-		
-			client.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
-
-		}else {			
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não autorizado a alterar a senha!"));
-		}
-		
 		try {
-			 clientRepository.save(client);
+		
+			token = token.substring(7, token.length());
+			String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+			
+			Optional<Client> clientOpt = clientRepository.findByEmail(clientEmail);
+			if(clientOpt.isEmpty()) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Cliente não encontrado!"));
+			}
+			
+			Client client = clientOpt.get();
+			if(validatePassword(client, changePasswordRequest.getOldPassword())) {
+			
+				client.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
+	
+			}else {			
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("senhaIncorreta"));
+			}
+		
+			clientRepository.save(client);
+			
 			return ResponseEntity.ok(new MessageResponse("Senha atualizada com sucesso!"));
 		
 		} catch (Exception e) {
-			System.out.println(e);
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro na atualização da senha!"));
-		}		
+			
+			return ResponseEntity.internalServerError().body(
+					new MessageResponse("Erro na atualização da senha!"));
+		}
 	}
 }
