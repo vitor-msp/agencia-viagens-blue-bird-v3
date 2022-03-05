@@ -47,54 +47,56 @@ public class PurchasesController{
 	@PostMapping
 	public ResponseEntity<?> postPurchase(
 			@RequestHeader("Authorization") String token,
-			@RequestParam(name = "trip") Integer tripId,
-			@RequestParam(name = "offer", required = false) Integer offerId){
-		
-		token = token.substring(7, token.length());
-		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
-		
-		Optional<Client> client = clientRepository.findByEmail(clientEmail);
-		if(client.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não encontrado!"));
-		}
-
-		Optional<Trip> trip = tripRepository.findById(tripId);
-		if(trip.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Viagem não encontrada!"));
-		}
-		
-		Purchase purchase = new Purchase();
-		purchase.setClient(client.get());
-		purchase.setTrip(trip.get());
-		
-		if(offerId != null) {
-			
-			Optional<Offer> offer = offerRepository.findById(offerId);
-			if(offer.isEmpty()) {
-				return ResponseEntity.badRequest()
-						.body(new MessageResponse("Erro: Promoção não encontrada!"));
-			}
-			
-			if(!offer.get().tripIsValid(trip.get())) {
-				
-				return ResponseEntity.badRequest().body(
-					new MessageResponse("Erro: A promoção não é válida para a viagem selecionada!"));
-			}
-			
-			purchase.setOffer(offer.get());
-		}
+			@RequestParam(name = "tripId") Integer tripId,
+			@RequestParam(name = "offerId", required = false) Integer offerId){
 		
 		try {
+			
+			token = token.substring(7, token.length());
+			String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+			
+			Optional<Client> client = clientRepository.findByEmail(clientEmail);
+			if(client.isEmpty()) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Cliente não encontrado!"));
+			}
+	
+			Optional<Trip> trip = tripRepository.findById(tripId);
+			if(trip.isEmpty()) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Viagem não encontrada!"));
+			}
+			
+			Purchase purchase = new Purchase();
+			purchase.setClient(client.get());
+			purchase.setTrip(trip.get());
+			
+			if(offerId != null) {
+				
+				Optional<Offer> offer = offerRepository.findById(offerId);
+				if(offer.isEmpty()) {
+					return ResponseEntity.badRequest()
+							.body(new MessageResponse("Erro: Promoção não encontrada!"));
+				}
+				
+				if(!offer.get().tripIsValid(trip.get())) {
+					
+					return ResponseEntity.badRequest().body(
+						new MessageResponse("Erro: A promoção não é válida para a viagem selecionada!"));
+				}
+				
+				purchase.setOffer(offer.get());
+			}
+		
 			purchaseRepository.save(purchase);
-			return ResponseEntity.ok(new MessageResponse("Viagem adquirida com sucesso!"));
+			
+			return ResponseEntity.ok(purchase);
 		
 		} catch (Exception e) {
-			System.out.println(e);
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro ao adquirir a viagem!"));
-		}		
+			
+			return ResponseEntity.internalServerError().body(
+					new MessageResponse("Erro ao adquirir a viagem!"));
+		}
 	}
 	
 	@DeleteMapping

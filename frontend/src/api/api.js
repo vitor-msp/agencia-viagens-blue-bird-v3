@@ -114,7 +114,18 @@ export const deletePurchase = async (purchaseId) => {
   return res;
 };
 
-export const postPurchase = async (purchaseToPost) => {
-  const res = await api.post(`/postPurchase`, purchaseToPost);
-  return res.data;
+export const postPurchase = async (purchase) => {
+  const { tripId, offerId } = purchase;
+
+  const res = await api
+    .post(`/purchases`, null, {
+      headers: configToken(),
+      params: {
+        tripId,
+        offerId,
+      },
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };

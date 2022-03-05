@@ -6,6 +6,10 @@ export const myPurchasesReducer = (state = [], action) => {
     case "removePurchase":
       return state.filter(({ id }) => id !== action.payload);
 
+    case "insertPurchase":
+      state.push(action.payload);
+      return state;
+
     case "clearMyPurchases":
       return [];
 

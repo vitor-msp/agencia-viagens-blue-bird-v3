@@ -12,6 +12,13 @@ export const removePurchase = (id) => {
   };
 };
 
+export const insertPurchase = (purchase) => {
+  return {
+    type: "insertPurchase",
+    payload: purchase,
+  };
+};
+
 export const clearMyPurchases = () => {
   return {
     type: "clearMyPurchases",

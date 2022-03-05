@@ -4,12 +4,12 @@ import { useState } from "react";
 import { ModalAuth } from "./ModalAuth";
 import { SpinnerBtn } from "../forms/SpinnerBtn";
 import {
-  updateAllMyPurchases,
+  insertPurchase,
   removePurchase,
 } from "../../store/actions/myPurchases.actions";
 import { clearModalTripContent } from "../../store/actions/modalTripContent.actions";
 import { updateModalInfo } from "../../store/actions/modalInfo.actions";
-import { deletePurchase, getPurchases, postPurchase } from "../../api/api";
+import { deletePurchase, postPurchase } from "../../api/api";
 import { formatCurrency } from "../../helpers/formatCurrency";
 import { formatDateTime } from "../../helpers/formatDateTime";
 
@@ -20,27 +20,18 @@ export function ModalTrip({ content }) {
   const { trip, destination, offer, isGetPurchase, purchaseId } = content;
   const { defaultValue, departure, arrival } = trip;
   const { city, uf, landingPlace } = destination;
-  const { id, discount, expiration } =
-    offer === null
+  const { discount, expiration } =
+    offer === undefined || offer === null
       ? {
-          id: null,
           discount: 0,
           expiration: "-",
         }
       : offer;
   const clientData = useSelector((state) => state.clientData);
+
   const purchaseToPost = {
-    client: {
-      id: clientData.id,
-      email: clientData.email,
-      password: null,
-    },
-    trip: {
-      id: trip.id,
-    },
-    offer: {
-      id: id,
-    },
+    tripId: trip.id,
+    offerId: offer === undefined || offer === null ? null : offer.id,
   };
   const dispatch = useDispatch();
 
@@ -62,25 +53,24 @@ export function ModalTrip({ content }) {
   const handleGetPurchase = (pass) => {
     setSpinner(true);
     setTimeout(async () => {
-      purchaseToPost.client.password = pass;
       try {
-        if (await postPurchase(purchaseToPost)) {
+        const res = await postPurchase(purchaseToPost);
+        if (res.status === 200) {
           handleClose();
           dispatch(updateModalInfo("Viagem adquirida com sucesso!!", true));
-          const purchases = await getPurchases({
-            ...purchaseToPost.client,
-          });
-          dispatch(updateAllMyPurchases(purchases));
-          document.getElementById("navMyTrips").click();
+          dispatch(insertPurchase(res.data));
+          // const purchases = await getPurchases({
+          //   ...purchaseToPost.client,
+          // });
+          // dispatch(updateAllMyPurchases(purchases));
+          // document.getElementById("navMyTrips").click();
         } else {
-          dispatch(updateModalInfo("Senha incorreta!", false));
+          dispatch(updateModalInfo("Erro ao adquirir a viagem!", false));
           setSpinner(false);
         }
       } catch {
         setSpinner(false);
-        dispatch(
-          updateModalInfo("Falha na comunicação com o servidor!", false)
-        );
+        dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
       }
     }, 1000);
   };
