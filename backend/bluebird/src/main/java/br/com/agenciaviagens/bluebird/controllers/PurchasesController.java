@@ -137,16 +137,24 @@ public class PurchasesController{
 	@GetMapping
 	public ResponseEntity<?> getMyPurchases(
 			@RequestHeader("Authorization") String token){
+		
+		try {
 
-		token = token.substring(7, token.length());
-		String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
-		
-		Optional<Client> client = clientRepository.findByEmail(clientEmail);
-		if(client.isEmpty()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse("Erro: Cliente não encontrado!"));
+			token = token.substring(7, token.length());
+			String clientEmail = jwtUtils.getUserNameFromJwtToken(token);
+			
+			Optional<Client> client = clientRepository.findByEmail(clientEmail);
+			if(client.isEmpty()) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Erro: Cliente não encontrado!"));
+			}
+			
+			return ResponseEntity.ok(client.get().getPurchases());
+			
+		} catch (Exception e) {
+			
+			return ResponseEntity.internalServerError().body(
+					new MessageResponse("Erro na obtenção das viagens!"));
 		}
-		
-		return ResponseEntity.ok(client.get().getPurchases());
 	}
 }

@@ -21,7 +21,7 @@ export function ModalTrip({ content }) {
   const { defaultValue, departure, arrival } = trip;
   const { city, uf, landingPlace } = destination;
   const { id, discount, expiration } =
-    offer === undefined
+    offer === null
       ? {
           id: null,
           discount: 0,

@@ -7,8 +7,7 @@ import { insertClientData } from "../../store/actions/clientData.actions";
 import { updateModalInfo } from "../../store/actions/modalInfo.actions";
 import { validateForm } from "../../helpers/validateForm";
 import { SpinnerBtn } from "./SpinnerBtn";
-import { getPurchases, login } from "../../api/api";
-import { updateAllMyPurchases } from "../../store/actions/myPurchases.actions";
+import { login } from "../../api/api";
 
 const objDefaultFields = {
   email: null,
@@ -36,11 +35,6 @@ export function FormLogin({ closeModal }) {
             dispatch(insertClientData(res.data));
             closeModal();
             dispatch(updateModalInfo("Login efetuado com sucesso!!", true));
-            // const purchases = await getPurchases({
-            //   ...fields,
-            //   id: res.data.id,
-            // });
-            // dispatch(updateAllMyPurchases(purchases));
           } else if (
             res.status === 400 &&
             res.data.message.trim() === "emailOuSenhaIncorretos"

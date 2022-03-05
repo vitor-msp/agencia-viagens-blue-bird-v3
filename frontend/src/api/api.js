@@ -91,13 +91,18 @@ export const setPassword = async (client) => {
   return res;
 };
 
-export const postPurchase = async (purchaseToPost) => {
-  const res = await api.post(`/postPurchase`, purchaseToPost);
-  return res.data;
+export const getPurchases = async () => {
+  const res = await api
+    .get(`/purchases`,  {
+      headers: configToken(),
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
-export const getPurchases = async (client) => {
-  const res = await api.post(`/getPurchases`, client);
+export const postPurchase = async (purchaseToPost) => {
+  const res = await api.post(`/postPurchase`, purchaseToPost);
   return res.data;
 };
 

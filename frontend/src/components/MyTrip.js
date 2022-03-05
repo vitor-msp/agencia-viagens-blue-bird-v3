@@ -1,17 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateModalTripContent } from "../store/actions/modalTripContent.actions";
 import { formatDateTime } from "../helpers/formatDateTime";
 
 export function MyTrip({ myPurchase }) {
-  const { id, trip } = myPurchase;
-  const { defaultValue, departure, arrival } = trip;
-  const destination = useSelector((state) => {
-    return state.destinations.find(({ id }) => id === trip.destination.id);
-  });
+  const { id, trip, offer } = myPurchase;
+  const { departure, arrival, destination } = trip;
   const { city, uf, landingPlace } = destination;
-  const offer = useSelector((state) => {
-    return state.offers.find(({ id }) => id === myPurchase.offer.id);
-  });
   const dispatch = useDispatch();
 
   const handleSelect = () => {
