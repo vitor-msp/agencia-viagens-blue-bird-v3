@@ -31,18 +31,24 @@ export function FormLogin({ closeModal }) {
       setSpinner(true);
       setTimeout(async () => {
         try {
-          const client = await login(fields);
-          if (client !== null) {
-            dispatch(updateClientData(client));
+          const res = await login(fields);
+          if (res.status === 200) {
+            // dispatch(updateClientData(res.data));
             closeModal();
             dispatch(updateModalInfo("Login efetuado com sucesso!!", true));
-            const purchases = await getPurchases({
-              ...fields,
-              id: client.id,
-            });
-            dispatch(updateAllMyPurchases(purchases));
-          } else {
+            // const purchases = await getPurchases({
+            //   ...fields,
+            //   id: res.data.id,
+            // });
+            // dispatch(updateAllMyPurchases(purchases));
+          } else if (
+            res.status === 400 &&
+            res.data.message.trim() === "emailOuSenhaIncorretos"
+          ) {
             dispatch(updateModalInfo("Usuário e/ou senha incorretos!", false));
+            handleReset();
+          } else {
+            dispatch(updateModalInfo("Erro ao efetuar o login!", false));
             handleReset();
           }
         } catch {

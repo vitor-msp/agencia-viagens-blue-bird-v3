@@ -26,7 +26,7 @@ public class DestinationsController{
 
 		} catch (Exception e) {
 
-			return ResponseEntity.badRequest()
+			return ResponseEntity.internalServerError()
 					.body(new MessageResponse("Erro ao obter os destinos!"));		
 		}
 	}

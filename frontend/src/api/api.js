@@ -54,13 +54,17 @@ export const createClient = async (client) => {
   return res;
 };
 
-export const updateClient = async (client) => {
-  const res = await api.put(`/client`, client);
-  return res.data;
+export const login = async (client) => {
+  const res = await api
+    .post(`/auth/login`, client)
+    .then((res) => res)
+    .catch((error) => error.response);
+  console.log(res);
+  return res;
 };
 
-export const login = async (client) => {
-  const res = await api.post(`/login`, client);
+export const updateClient = async (client) => {
+  const res = await api.put(`/client`, client);
   return res.data;
 };
 

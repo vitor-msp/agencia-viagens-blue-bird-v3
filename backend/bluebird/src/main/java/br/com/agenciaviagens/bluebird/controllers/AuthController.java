@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,17 +42,29 @@ public class AuthController {
 	JwtUtils jwtUtils;
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateClient(@Valid @RequestBody LoginRequest loginRequest) {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 		
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
+		try {
+			
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(
+							loginRequest.getEmail(), loginRequest.getPassword()));;
+			
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String jwt = jwtUtils.generateJwtToken(authentication);
+			
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
+			return ResponseEntity.ok(new JwtResponse(jwt, 
+													 userDetails.getId(),
+													 userDetails.getUsername()));
+		} catch (BadCredentialsException e) {
+
+			return ResponseEntity.badRequest().body(new MessageResponse("emailOuSenhaIncorretos"));
 		
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(),
-												 userDetails.getUsername()));
+		} catch (Exception e) {
+			
+			return ResponseEntity.internalServerError().body(new MessageResponse("Erro ao efetuar o login!"));
+		}
 	}
 	
 	@PostMapping("/register")
@@ -76,7 +89,7 @@ public class AuthController {
 			
 		} catch (Exception e) {
 
-			return ResponseEntity.badRequest().body(new MessageResponse("Erro ao efetuar o cadastro!"));
+			return ResponseEntity.internalServerError().body(new MessageResponse("Erro ao efetuar o cadastro!"));
 		}
 	}
 }

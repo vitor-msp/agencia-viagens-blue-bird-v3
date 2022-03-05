@@ -31,7 +31,7 @@ public class ContactController{
 
 		} catch (Exception e) {
 
-			return ResponseEntity.badRequest().body(new MessageResponse("Erro ao efetuar o contato!"));
+			return ResponseEntity.internalServerError().body(new MessageResponse("Erro ao efetuar o contato!"));
 		}
 	}
 }

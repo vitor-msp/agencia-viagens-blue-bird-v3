@@ -72,7 +72,7 @@ public class TripsController{
 			
 		} catch (Exception e) {
 	
-			return ResponseEntity.badRequest()
+			return ResponseEntity.internalServerError()
 					.body(new MessageResponse("Erro ao obter as viagens!"));
 		}
 	}
