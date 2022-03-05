@@ -72,8 +72,13 @@ export const login = async (client) => {
 };
 
 export const updateClient = async (client) => {
-  const res = await api.put(`/client`, client);
-  return res.data;
+  const res = await api
+    .put(`/client`, client, {
+      headers: configToken(),
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  return res;
 };
 
 export const setPassword = async (client) => {

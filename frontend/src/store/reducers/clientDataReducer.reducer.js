@@ -1,5 +1,5 @@
 const defaultData = {
-  id: null,
+  // id: null,
   name: null,
   rg: null,
   cpf: null,
@@ -9,6 +9,9 @@ const defaultData = {
 
 export const clientDataReducer = (state = defaultData, action) => {
   switch (action.type) {
+    case "insertClientData":
+      return action.payload;
+
     case "updateClientData":
       return action.payload;
 

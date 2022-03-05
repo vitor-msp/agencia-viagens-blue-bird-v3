@@ -3,7 +3,7 @@ import { Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { InputDefault } from "./InputDefault";
 import { InputEmail } from "./InputEmail";
-import { updateClientData } from "../../store/actions/clientData.actions";
+import { insertClientData } from "../../store/actions/clientData.actions";
 import { updateModalInfo } from "../../store/actions/modalInfo.actions";
 import { validateForm } from "../../helpers/validateForm";
 import { SpinnerBtn } from "./SpinnerBtn";
@@ -33,7 +33,7 @@ export function FormLogin({ closeModal }) {
         try {
           const res = await login(fields);
           if (res.status === 200) {
-            dispatch(updateClientData(res.data));
+            dispatch(insertClientData(res.data));
             closeModal();
             dispatch(updateModalInfo("Login efetuado com sucesso!!", true));
             // const purchases = await getPurchases({
