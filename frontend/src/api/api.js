@@ -9,6 +9,15 @@ const api = axios.create({
   },
 });
 
+const configToken = () => {
+  const header = {
+    Authorization: `${localStorage.getItem(
+      "BBTokenType"
+    )} ${localStorage.getItem("BBToken")}`,
+  };
+  return header;
+};
+
 export const contact = async (contact) => {
   const res = await api
     .post(`/contact`, contact)
@@ -59,7 +68,6 @@ export const login = async (client) => {
     .post(`/auth/login`, client)
     .then((res) => res)
     .catch((error) => error.response);
-  console.log(res);
   return res;
 };
 

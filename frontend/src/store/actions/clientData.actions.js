@@ -1,11 +1,15 @@
 import { formatDate } from "../../helpers/formatDateTime";
 
 export const updateClientData = (clientData) => {
+
+  localStorage.setItem("BBToken",clientData.token)
+  localStorage.setItem("BBTokenType",clientData.tokenType)
+
   return {
     type: "updateClientData",
     payload: {
-      ...clientData,
-      birthDate: formatDate(clientData.birthDate)
+      ...clientData.client,
+      birthDate: formatDate(clientData.client.birthDate)
     },
   };
 };

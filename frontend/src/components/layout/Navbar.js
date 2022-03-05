@@ -12,7 +12,8 @@ export function Navbar() {
   const dispatch = useDispatch();
 
   const logout = () => {
-    // excluir token
+    localStorage.removeItem("BBToken");
+    localStorage.removeItem("BBTokenType");
     dispatch(clearClientData());
     dispatch(clearMyPurchases());
   };
