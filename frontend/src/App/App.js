@@ -17,6 +17,8 @@ import { getDestinations, getOffers } from "../api/api";
 import { updateAllDestinations } from "../store/actions/destinations.actions";
 import { updateModalInfo } from "../store/actions/modalInfo.actions";
 import { updateAllOffers } from "../store/actions/offers.actions";
+import { isLogged } from "../helpers/isLogged";
+import { insertClientEmail } from "../store/actions/clientData.actions";
 
 function App() {
   const modalTripContent = useSelector((state) => state.modalTripContent);
@@ -64,6 +66,10 @@ function App() {
       }
       if (errorMsg) {
         dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
+      }
+      const clientEmail = isLogged()
+      if(clientEmail !== null){
+        dispatch(insertClientEmail(clientEmail));
       }
     };
     reqData();

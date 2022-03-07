@@ -1,26 +1,24 @@
 package br.com.agenciaviagens.bluebird.payload.response;
 
-import br.com.agenciaviagens.bluebird.models.entities.Client;
+public class JwtResponse {
 
-public class ClientResponse {
-
-	private Client client;
+	private String email;
 	private String token;
 	private String tokenType = "Bearer";
 	
-	public ClientResponse(Client client, String token, String tokenType) {
+	public JwtResponse(String email, String token, String tokenType) {
 		super();
-		this.setClient(client);
+		this.setEmail(email);
 		this.setToken(token);
 		this.setTokenType(tokenType);
 	}
 
-	public Client getClient() {
-		return client;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getToken() {

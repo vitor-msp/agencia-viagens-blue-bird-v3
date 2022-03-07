@@ -3,11 +3,12 @@ import { Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { InputDefault } from "./InputDefault";
 import { InputEmail } from "./InputEmail";
-import { insertClientData } from "../../store/actions/clientData.actions";
+import { insertClientEmail } from "../../store/actions/clientData.actions";
 import { updateModalInfo } from "../../store/actions/modalInfo.actions";
 import { validateForm } from "../../helpers/validateForm";
 import { SpinnerBtn } from "./SpinnerBtn";
 import { login } from "../../api/api";
+import { isLogged } from "../../helpers/isLogged";
 
 const objDefaultFields = {
   email: null,
@@ -32,7 +33,11 @@ export function FormLogin({ closeModal }) {
         try {
           const res = await login(fields);
           if (res.status === 200) {
-            dispatch(insertClientData(res.data));
+            localStorage.setItem("BBJwtInfo", JSON.stringify(res.data));
+            const clientEmail = isLogged();
+            if (clientEmail !== null) {
+              dispatch(insertClientEmail(clientEmail));
+            }
             closeModal();
             dispatch(updateModalInfo("Login efetuado com sucesso!!", true));
           } else if (

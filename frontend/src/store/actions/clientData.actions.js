@@ -1,21 +1,23 @@
 import { formatDate } from "../../helpers/formatDateTime";
 
-export const insertClientData = (clientData) => {
-
-  localStorage.setItem("BBToken",clientData.token)
-  localStorage.setItem("BBTokenType",clientData.tokenType)
-
+export const insertClientEmail = (email) => {
   return {
-    type: "insertClientData",
+    type: "insertClientEmail",
+    payload: { email },
+  };
+};
+
+export const insertClientData = (client) => {
+  return {
+    type: "updateClientData",
     payload: {
-      ...clientData.client,
-      birthDate: formatDate(clientData.client.birthDate)
+      ...client,
+      birthDate: formatDate(client.birthDate),
     },
   };
 };
 
 export const updateClientData = (client) => {
-
   return {
     type: "updateClientData",
     payload: client,

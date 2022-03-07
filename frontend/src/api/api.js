@@ -10,10 +10,9 @@ const api = axios.create({
 });
 
 const configToken = () => {
+  const BBJwtInfo = JSON.parse(localStorage.getItem("BBJwtInfo"));
   const header = {
-    Authorization: `${localStorage.getItem(
-      "BBTokenType"
-    )} ${localStorage.getItem("BBToken")}`,
+    Authorization: `${BBJwtInfo.tokenType} ${BBJwtInfo.token}`,
   };
   return header;
 };
@@ -71,6 +70,17 @@ export const login = async (client) => {
   return res;
 };
 
+export const getClient = async () => {
+  const res = await api
+    .put(`/client`, {
+      headers: configToken(),
+    })
+    .then((res) => res)
+    .catch((error) => error.response);
+  console.log(res);
+  return res;
+};
+
 export const updateClient = async (client) => {
   const res = await api
     .put(`/client`, client, {
@@ -81,7 +91,7 @@ export const updateClient = async (client) => {
   return res;
 };
 
-export const setPassword = async (client) => {
+export const updatePassword = async (client) => {
   const res = await api
     .put(`/client/password`, client, {
       headers: configToken(),

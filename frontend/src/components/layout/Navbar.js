@@ -12,8 +12,7 @@ export function Navbar() {
   const dispatch = useDispatch();
 
   const logout = () => {
-    localStorage.removeItem("BBToken");
-    localStorage.removeItem("BBTokenType");
+    localStorage.removeItem("BBJwtInfo");
     dispatch(clearClientData());
     dispatch(clearMyPurchases());
   };
@@ -128,7 +127,7 @@ export function Navbar() {
       </div>
 
       <div className="col-3 d-flex justify-content-center align-items-center">
-        {clientData.name === null ? (
+        {clientData.email === null ? (
           <a
             onClick={() => {
               dispatch(showModalLogin(true));

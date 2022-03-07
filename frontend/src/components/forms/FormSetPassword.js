@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Form, Row } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { InputDefault } from "./InputDefault";
 import { InputSetPassword } from "./InputSetPassword";
 import { SpinnerBtn } from "./SpinnerBtn";
 import { updateModalInfo } from "../../store/actions/modalInfo.actions";
 import { validateForm } from "../../helpers/validateForm";
-import { setPassword } from "../../api/api";
+import { updatePassword } from "../../api/api";
 
 export function FormSetPassword({ modalClose }) {
   const objDefaultFields = {
-    // id: useSelector((state) => state.clientData.id),
-    // email: useSelector((state) => state.clientData.email),
     oldPassword: null,
     newPassword: null,
   };
@@ -30,9 +28,9 @@ export function FormSetPassword({ modalClose }) {
       setDisableFields(true);
       setSpinner(true);
       setTimeout(async () => {
-        const clientToUpdate = Object.assign({}, fields);
+        const passwordToUpdate = Object.assign({}, fields);
         try {
-          const res = await setPassword(clientToUpdate)
+          const res = await updatePassword(passwordToUpdate)
           if (res.status === 200) {
             dispatch(updateModalInfo("Senha alterada com sucesso!!", true));
           }else if (
