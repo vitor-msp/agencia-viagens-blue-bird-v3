@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ModalTrip } from "../components/modals/ModalTrip";
@@ -12,17 +13,19 @@ import { OffersPage } from "../pages/OffersPage";
 import { TripsPage } from "../pages/TripsPage";
 import { MyTripsPage } from "../pages/MyTripsPage";
 import { MyAccountPage } from "../pages/MyAccountPage";
-import { useEffect } from "react";
-import { getDestinations } from "../api/api";
+import { getDestinations, getOffers } from "../api/api";
 import { updateAllDestinations } from "../store/actions/destinations.actions";
 import { updateModalInfo } from "../store/actions/modalInfo.actions";
+import { updateAllOffers } from "../store/actions/offers.actions";
 
 function App() {
   const modalTripContent = useSelector((state) => state.modalTripContent);
   const modalInfo = useSelector((state) => state.modalInfo);
   const modalLogin = useSelector((state) => state.modalLogin);
   const destinations = useSelector((state) => state.destinations);
+  const offers = useSelector((state) => state.offers);
   const dispatch = useDispatch();
+  let errorMsg = false;
 
   useEffect(() => {
     const reqDestinations = async () => {
@@ -34,13 +37,36 @@ function App() {
           dispatch(updateModalInfo("Erro ao obter os destinos!", false));
         }
       } catch (error) {
-        dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
+        errorMsg = true;
       }
     };
 
-    if (destinations.length === 0) {
-      reqDestinations();
-    }
+    const reqOffers = async () => {
+      try {
+        const res = await getOffers();
+        if (res.status === 200) {
+          dispatch(updateAllOffers(res.data));
+        } else {
+          dispatch(updateModalInfo("Erro ao obter as promoções!", false));
+        }
+      } catch (error) {
+        errorMsg = true;
+      }
+    };
+
+    const reqData = async () => {
+      errorMsg = false;
+      if (destinations.length === 0) {
+        await reqDestinations();
+      }
+      if (offers.length === 0) {
+        await reqOffers();
+      }
+      if (errorMsg) {
+        dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
+      }
+    };
+    reqData();
   }, []);
 
   return (

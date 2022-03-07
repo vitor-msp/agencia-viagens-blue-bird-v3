@@ -28,6 +28,7 @@ export function ModalTrip({ content }) {
         }
       : offer;
   const clientData = useSelector((state) => state.clientData);
+  const myPurchases = useSelector((state) => state.myPurchases);
 
   const purchaseToPost = {
     tripId: trip.id,
@@ -58,12 +59,10 @@ export function ModalTrip({ content }) {
         if (res.status === 200) {
           handleClose();
           dispatch(updateModalInfo("Viagem adquirida com sucesso!!", true));
-          dispatch(insertPurchase(res.data));
-          // const purchases = await getPurchases({
-          //   ...purchaseToPost.client,
-          // });
-          // dispatch(updateAllMyPurchases(purchases));
-          // document.getElementById("navMyTrips").click();
+          if (myPurchases.length !== 0) {
+            dispatch(insertPurchase(res.data));
+          }
+          document.getElementById("navMyTrips").click();
         } else {
           dispatch(updateModalInfo("Erro ao adquirir a viagem!", false));
           setSpinner(false);
