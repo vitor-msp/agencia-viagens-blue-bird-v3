@@ -1,7 +1,6 @@
 import { Form, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { ModalAuth } from "./ModalAuth";
 import { SpinnerBtn } from "../forms/SpinnerBtn";
 import {
   insertPurchase,
@@ -15,7 +14,6 @@ import { formatDateTime } from "../../helpers/formatDateTime";
 
 export function ModalTrip({ content }) {
   const [modalOpen, setModalOpen] = useState(true);
-  const [showAuth, setShowAuth] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const { trip, destination, offer, isGetPurchase, purchaseId } = content;
   const { defaultValue, departure, arrival } = trip;
@@ -39,19 +37,19 @@ export function ModalTrip({ content }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (clientData.id !== null) {
-      setShowAuth(true);
-    } else {
+    if (clientData.email === null) {
       dispatch(
         updateModalInfo(
           "Para adquirir uma viagem, você precisa acessar sua conta!",
           false
         )
       );
+    } else {
+      isGetPurchase ? handleGetPurchase() : handleDeletePurchase();
     }
   };
 
-  const handleGetPurchase = (pass) => {
+  const handleGetPurchase = () => {
     setSpinner(true);
     setTimeout(async () => {
       try {
@@ -74,7 +72,7 @@ export function ModalTrip({ content }) {
     }, 1000);
   };
 
-  const handleDeletePurchase = (pass) => {
+  const handleDeletePurchase = () => {
     setSpinner(true);
     setTimeout(async () => {
       try {
@@ -191,18 +189,6 @@ export function ModalTrip({ content }) {
           )}
         </Modal.Footer>
       </Modal>
-      {showAuth && (
-        <ModalAuth
-          showModal={(show) => {
-            setShowAuth(show);
-          }}
-          passModal={(value) => {
-            isGetPurchase
-              ? handleGetPurchase(value)
-              : handleDeletePurchase(value);
-          }}
-        />
-      )}
     </>
   );
 }
