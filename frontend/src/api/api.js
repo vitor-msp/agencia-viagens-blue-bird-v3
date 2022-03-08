@@ -72,12 +72,11 @@ export const login = async (client) => {
 
 export const getClient = async () => {
   const res = await api
-    .put(`/client`, {
+    .get(`/client`, {
       headers: configToken(),
     })
     .then((res) => res)
     .catch((error) => error.response);
-  console.log(res);
   return res;
 };
 

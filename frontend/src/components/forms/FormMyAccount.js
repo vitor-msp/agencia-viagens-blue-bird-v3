@@ -8,21 +8,58 @@ import { InputEmail } from "./InputEmail";
 import { SpinnerBtn } from "./SpinnerBtn";
 import { ModalSetPassword } from "../modals/ModalSetPassword";
 import { ModalAuth } from "../modals/ModalAuth";
-import { updateClientData } from "../../store/actions/clientData.actions";
+import {
+  insertClientData,
+  updateClientData,
+} from "../../store/actions/clientData.actions";
 import { updateModalInfo } from "../../store/actions/modalInfo.actions";
 import { validateForm } from "../../helpers/validateForm";
-import { updateClient } from "../../api/api";
+import { getClient, updateClient } from "../../api/api";
 
 export function FormMyAccount() {
-  const objDefaultFields = useSelector((state) => state.clientData);
+  let objDefaultFields = {
+    name: useSelector((state) => state.clientData.name),
+    rg: useSelector((state) => state.clientData.rg),
+    cpf: useSelector((state) => state.clientData.cpf),
+    birthDate: useSelector((state) => state.clientData.birthDate),
+    email: useSelector((state) => state.clientData.email),
+  };
+  // let objDefaultFields = useSelector((state) => state.clientData);
+  // const [objDefaultFields, setObjDefaultFields] = useState(clientData);
   const [showValidations, setShowValidations] = useState(false);
-  const [fields, setFields] = useState(objDefaultFields);
+  const [fields, setFields] = useState(Object.assign({}, objDefaultFields));
   const [isEdit, setIsEdit] = useState(false);
   const [showModalSetPassword, setShowModalSetPassword] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const [disableFields, setDisableFields] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const reqClientData = async () => {
+      try {
+        const res = await getClient();
+        if (res.status === 200) {
+          dispatch(insertClientData(res.data));
+          setFields(res.data);
+        } else {
+          dispatch(
+            updateModalInfo("Erro ao obter os dados do usuário!", false)
+          );
+        }
+      } catch (error) {
+        dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
+      }
+    };
+
+    if (objDefaultFields.name === undefined || objDefaultFields.name === null) {
+      reqClientData();
+    }
+  }, []);
+
+  useEffect(() => {
+    setShowValidations((prev) => (prev === false ? null : false));
+  }, [objDefaultFields.name]);
 
   const handleCancelEdit = () => {
     setIsEdit(false);
@@ -39,6 +76,7 @@ export function FormMyAccount() {
     event.stopPropagation();
     setShowValidations(true);
     if (validateForm(fields)) {
+      console.log(fields);
       setShowAuth(true);
     }
   };
@@ -143,12 +181,7 @@ export function FormMyAccount() {
           <InputEmail
             showValidations={showValidations}
             defaultValue={objDefaultFields.email}
-            handleFieldChange={(value) => {
-              setFields({
-                ...fields,
-                email: value,
-              });
-            }}
+            handleFieldChange={() => {}}
             disabled={true}
           />
           <Form.Group className="my-2 col-md-12">

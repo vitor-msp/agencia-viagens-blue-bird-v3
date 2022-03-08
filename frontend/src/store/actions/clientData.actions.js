@@ -3,13 +3,13 @@ import { formatDate } from "../../helpers/formatDateTime";
 export const insertClientEmail = (email) => {
   return {
     type: "insertClientEmail",
-    payload: { email },
+    payload: email,
   };
 };
 
 export const insertClientData = (client) => {
   return {
-    type: "updateClientData",
+    type: "insertClientData",
     payload: {
       ...client,
       birthDate: formatDate(client.birthDate),
