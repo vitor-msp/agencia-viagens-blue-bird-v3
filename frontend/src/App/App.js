@@ -57,6 +57,10 @@ function App() {
     };
 
     const reqData = async () => {
+      const clientEmail = isLogged();
+      if (clientEmail !== null) {
+        dispatch(insertClientEmail(clientEmail));
+      }
       errorMsg = false;
       if (destinations.length === 0) {
         await reqDestinations();
@@ -66,10 +70,6 @@ function App() {
       }
       if (errorMsg) {
         dispatch(updateModalInfo("Erro na comunicação com o servidor!", false));
-      }
-      const clientEmail = isLogged()
-      if(clientEmail !== null){
-        dispatch(insertClientEmail(clientEmail));
       }
     };
     reqData();

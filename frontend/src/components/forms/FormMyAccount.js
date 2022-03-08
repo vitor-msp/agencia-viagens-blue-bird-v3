@@ -17,17 +17,9 @@ import { validateForm } from "../../helpers/validateForm";
 import { getClient, updateClient } from "../../api/api";
 
 export function FormMyAccount() {
-  let objDefaultFields = {
-    name: useSelector((state) => state.clientData.name),
-    rg: useSelector((state) => state.clientData.rg),
-    cpf: useSelector((state) => state.clientData.cpf),
-    birthDate: useSelector((state) => state.clientData.birthDate),
-    email: useSelector((state) => state.clientData.email),
-  };
-  // let objDefaultFields = useSelector((state) => state.clientData);
-  // const [objDefaultFields, setObjDefaultFields] = useState(clientData);
+  const objDefaultFields = useSelector((state) => state.clientData);
   const [showValidations, setShowValidations] = useState(false);
-  const [fields, setFields] = useState(Object.assign({}, objDefaultFields));
+  const [fields, setFields] = useState(objDefaultFields);
   const [isEdit, setIsEdit] = useState(false);
   const [showModalSetPassword, setShowModalSetPassword] = useState(false);
   const [spinner, setSpinner] = useState(false);
@@ -59,7 +51,7 @@ export function FormMyAccount() {
 
   useEffect(() => {
     setShowValidations((prev) => (prev === false ? null : false));
-  }, [objDefaultFields.name]);
+  }, [objDefaultFields]);
 
   const handleCancelEdit = () => {
     setIsEdit(false);
@@ -76,7 +68,6 @@ export function FormMyAccount() {
     event.stopPropagation();
     setShowValidations(true);
     if (validateForm(fields)) {
-      console.log(fields);
       setShowAuth(true);
     }
   };

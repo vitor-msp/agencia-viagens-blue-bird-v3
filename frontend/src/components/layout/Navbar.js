@@ -15,6 +15,7 @@ export function Navbar() {
     localStorage.removeItem("BBJwtInfo");
     dispatch(clearClientData());
     dispatch(clearMyPurchases());
+    dispatch(updateModalInfo("Você saiu da sua conta!!", true));
   };
 
   return (
@@ -139,10 +140,7 @@ export function Navbar() {
         ) : (
           <NavLink
             to={"/"}
-            onClick={() => {
-              logout();
-              dispatch(updateModalInfo("Você saiu da sua conta!!", true));
-            }}
+            onClick={logout}
             className="nav-link"
           >
             Sair

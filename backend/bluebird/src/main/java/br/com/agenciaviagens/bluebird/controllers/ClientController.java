@@ -61,7 +61,7 @@ public class ClientController{
 		} catch (Exception e) {
 			
 			return ResponseEntity.internalServerError().body(
-					new MessageResponse("Erro na atualização dos dados!"));
+					new MessageResponse("Erro ao obter os dados do cliente!"));
 		}
 	}
 	
