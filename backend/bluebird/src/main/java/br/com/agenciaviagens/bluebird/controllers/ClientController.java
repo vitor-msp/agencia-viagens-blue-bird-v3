@@ -24,7 +24,7 @@ import br.com.agenciaviagens.bluebird.security.jwt.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/api/client")
 public class ClientController{
 	
 	@Autowired

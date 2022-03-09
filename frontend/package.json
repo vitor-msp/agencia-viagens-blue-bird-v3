@@ -1,7 +1,6 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "homepage": "http://localhost:8080/AgenciaViagens",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",

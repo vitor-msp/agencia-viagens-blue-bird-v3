@@ -18,14 +18,14 @@ Desenvolvimento de um site para clientes realizarem cadastro e aquisições de v
 2. Rode o script banco-de-dados/criarBD.sql no PostgreSQL.
 
 ###### 2. Backend
-1. No Eclipse, adicione o projeto existente na pasta backend/AgenciaViagens ao seu workspace.
-2. Edite o arquivo backend/AgenciaViagens/src/main/java/models/persistence/ConnectionFactory.java, nas linhas 7, 8 e 9, inserindo o seu usuário, senha, endereço e porta de conexão com o banco de dados.
+1. Na sua IDE (Eclipse, STS, etc), adicione o projeto existente na pasta backend/bluebird ao seu workspace.
+2. Renomeie o arquivo backend/bluebird/src/main/resources/application.properties.sample para 'application.properties', depois insira seu usuário e senha do PostgreSQL nas linhas 2 e 3.
 ```
-private static final String USERNAME = "root";
-private static final String PASSWORD = "";
-private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/agenciaviagens";
+spring.datasource.username=
+spring.datasource.password=
 ```
-3. Execute o projeto com o Tomcat. A aplicação irá ouvir a porta 8080.
+3. Rode a aplicação java para que as tabelas sejam criadas no banco de dados.
+4. Rode o script banco-de-dados/popularBD.sql no banco de dados *agenciaviagens* já criado no PostgreSQL.
 
 ###### 3. Frontend
 1. Execute o comando abaixo na pasta frontend para instalar as dependencias do React:
@@ -34,12 +34,13 @@ npm install
 ```
 
 #### Execução
-Inicie o banco de dados e o servidor Apache Tomcat e execute um dos comandos abaixo na pasta frontend para rodar o React:
+Inicie o banco de dados PostgreSQL e a aplicação java na sua IDE e execute um dos comandos abaixo na pasta frontend para rodar o React:
 ```
 npm start
 ```
+ou
 
 ```
 yarn start
 ```
-Após todas as aplicações iniciarem corretamente, o sistema estará em funcionamento.
+Após todas as aplicações iniciarem corretamente, o sistema estará em funcionamento e você poderá visualizar o resultado no link http://localhost:8080.

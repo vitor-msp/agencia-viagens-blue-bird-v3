@@ -23,7 +23,7 @@ import br.com.agenciaviagens.bluebird.payload.response.TripResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/trips")
+@RequestMapping("/api/trips")
 public class TripsController{
 
 	@Autowired

@@ -1,9 +1,10 @@
 import axios from "axios";
 
+const url = `http://localhost`;
 const port = 8080;
 
 const api = axios.create({
-  baseURL: `http://192.168.0.13:${port}/`,
+  baseURL: `${url}:${port}/api/`,
   headers: {
     "Content-type": "application/json",
   },
