@@ -15,7 +15,7 @@ Desenvolvimento de um site para clientes realizarem cadastro e aquisições de v
 
 ###### 1. Banco de dados
 1. Será necessário ter o PostgreSQL instalado e sem um banco de dados de nome *agenciaviagens*.
-2. Rode o script banco-de-dados/criarBD.sql no PostgreSQL.
+2. Rode o script banco-de-dados/criarBD.sql no PostgreSQL ou crie um banco de dados chamado *agenciaviagens* manualmente.
 
 ###### 2. Backend
 1. Na sua IDE (Eclipse, STS, etc), adicione o projeto existente na pasta backend/bluebird ao seu workspace.
@@ -24,7 +24,7 @@ Desenvolvimento de um site para clientes realizarem cadastro e aquisições de v
 spring.datasource.username=
 spring.datasource.password=
 ```
-3. Rode a aplicação java para que as tabelas sejam criadas no banco de dados.
+3. Rode a aplicação java com o Spring Boot para que as tabelas sejam criadas no banco de dados.
 4. Rode o script banco-de-dados/popularBD.sql no banco de dados *agenciaviagens* já criado no PostgreSQL.
 
 ###### 3. Frontend
@@ -43,4 +43,4 @@ ou
 ```
 yarn start
 ```
-Após todas as aplicações iniciarem corretamente, o sistema estará em funcionamento e você poderá visualizar o resultado no link http://localhost:8080.
+Após todas as aplicações iniciarem corretamente, o sistema estará em funcionamento e você poderá visualizar o resultado no link onde o React será aberto (geralmente http://localhost:3000).
